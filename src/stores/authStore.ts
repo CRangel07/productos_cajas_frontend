@@ -1,75 +1,47 @@
-// import { defineStore } from "pinia";
-// import { apiRequest } from "../services/fetchApi";
-// import { mostrarError, mostrarToast } from "../services/alertas";
-// import { ISesionRespuesta } from "../interfaces/apiResponseInterfaces";
-// import { ComputedRef, Ref, computed, ref } from "vue";
-// import { useRouter } from "vue-router";
-// import { RutasNomina } from "../config/routesNames";
+import { useApi } from "../composables/useApi";
+import { useRouter } from "vue-router";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
+import { ILoginUsuario } from "../types/responses";
 
-// export const useAuthStore = defineStore("auth", () => {
-//   const router = useRouter();
+export const useAuthStore = defineStore("regp_store_auth", () => {
+  const LocalKey = "session_info_regp_azteca";
 
-//   const sesionDesdeLocalStorage = JSON.parse(
-//     localStorage.getItem("token_local")!
-//   );
+  const router = useRouter();
 
-//   const sesion: Ref<ISesionRespuesta | null> = ref(
-//     sesionDesdeLocalStorage as ISesionRespuesta | null
-//   );
+  const { apiFetch, error, loading } = useApi();
 
-//   const getSesion: ComputedRef<ISesionRespuesta | null> = computed(
-//     () => sesion.value
-//   );
+  const usuarioLS = localStorage.getItem(LocalKey)
+    ? (JSON.parse(localStorage.getItem(LocalKey)!) as ILoginUsuario)
+    : null;
 
-//   const iniciarSesion = async (data: {
-//     usuario: string;
-//     contrasena: string;
-//   }) => {
-//     try {
-//       const response: ISesionRespuesta = await apiRequest("/login", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           usuario: data.usuario,
-//           contrasena: data.contrasena,
-//         }),
-//       });
+  const autenticado = computed<boolean>(() => !!usuario.value);
 
-//       sesion.value = response;
+  const usuario = ref<ILoginUsuario | null>(usuarioLS);
 
-//       localStorage.setItem("token_local", JSON.stringify(sesion.value));
+  const login = async (username: string, pass: string) => {
+    const responseLogin = await apiFetch<{ usuario: ILoginUsuario }>("/login", {
+      method: "POST",
+      body: { usuario: username, contrasena: pass },
+    });
 
-//       redirigirRuta();
-//       mostrarToast({
-//         text: `Bienvenido ${sesion.value.usuario}, sesión iniciada`,
-//         icon: "info",
-//       });
-//     } catch (error) {
-//       mostrarError(error);
-//     }
-//   };
+    if (responseLogin && error.value === null) {
+      usuario.value = responseLogin.usuario;
+      localStorage.setItem(LocalKey, JSON.stringify(usuario.value));
+      router.replace({ name: "regp_registro_page" });
+    }
+  };
 
-//   const logout = async () => {
-//     try {
-//       await apiRequest("/logout", { method: "POST" });
-//       sesion.value = null;
-//       localStorage.removeItem("token_local");
-//       router.replace({ name: RutasNomina.Login });
-//       mostrarToast({ text: "Se finalizó la sesión", icon: "info" });
-//     } catch (error) {
-//       mostrarError(error);
-//     }
-//   };
+  const logout = async () => {
+    const responseLogout = await apiFetch<{}>("/logout", {
+      method: "POST",
+    });
 
-//   const redirigirRuta = () => {
-//     if (sesion.value?.auth) {
-//       router.replace({ name: RutasNomina.Home });
-//       return;
-//     }
-//     router.replace({ name: RutasNomina.Login });
-//   };
+    if (responseLogout && error.value === null) {
+      localStorage.removeItem(LocalKey);
+      router.replace({ name: "regp_login" });
+    }
+  };
 
-//   return { iniciarSesion, logout, getSesion };
-// });
+  return { login, logout, error, loading, usuario, autenticado };
+});

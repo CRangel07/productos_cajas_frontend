@@ -1,11 +1,17 @@
 <template>
   <div class="grow h-[80vh] relative">
-    <div class="mb-3 w-full max-w-[300px]">
+    <div class="mb-3 flex flex-wrap max-w-[500px] gap-2">
       <input
         type="text"
-        class="border py-1.5 px-4 rounded-lg border-slate-500 w-full focus:border-blue-500 outline-none"
-        placeholder="Buscar por nombre"
+        class="border py-1.5 px-4 rounded-lg border-slate-500 grow focus:border-blue-500 outline-none"
+        placeholder="Buscar por nombre o código"
       />
+      <button
+        type="button"
+        class="bg-blue-500 rounded text-blue-50 font-medium cursor-pointer px-2"
+      >
+        Buscar
+      </button>
     </div>
     <div class="overflow-auto h-full">
       <table

@@ -81,9 +81,14 @@
         }"
       />
 
+      <p class="api-error" v-if="props.error">
+        {{ props.error }}
+      </p>
+
       <button
         type="submit"
-        class="border py-0.5 px-2 rounded-md border-blue-800 bg-blue-500 text-white font-medium cursor-pointer active:scale-95"
+        class="border py-0.5 px-2 rounded-md border-blue-800 bg-blue-500 text-white font-medium cursor-pointer active:scale-95 disabled:bg-slate-500"
+        :disabled="cargando"
       >
         Guardar
       </button>
@@ -101,6 +106,11 @@ import { useAlert } from "../composables/useAlert";
 
 const alert = useAlert();
 
+const props = defineProps<{
+  cargando: boolean;
+  error: string | null;
+  reset: 1 | 0;
+}>();
 const emit = defineEmits<{ (e: "submit", data: DataProducto): void }>();
 
 const iniciarDatos = (): DataProducto => ({
@@ -134,7 +144,6 @@ const handleSubmit = async () => {
 
   if (userRes.isConfirmed) {
     emit("submit", dataProducto);
-    Object.assign(dataProducto, iniciarDatos());
   }
 };
 
@@ -166,6 +175,13 @@ function useDebouncedRepetido<T extends object, K extends keyof T>(
     }
   );
 }
+
+watch(
+  () => props.reset,
+  (flag) => {
+    if (flag == 1) Object.assign(dataProducto, iniciarDatos());
+  }
+);
 
 useDebouncedRepetido(dataProducto, "codigo", 200);
 useDebouncedRepetido(dataProducto, "codigoCaja", 200);

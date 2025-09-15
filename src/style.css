@@ -2,18 +2,10 @@
 
 @import "tailwindcss";
 
-:root {
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-#app {
-  font-family:
-    "Poppins", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  min-height: 80vh;
-  background-color: transparent;
-}
-
 .api-error {
   @apply bg-rose-200 text-rose-700 border border-rose-600 text-center whitespace-pre-line rounded-md mb-4 px-2 py-2.5;
+}
+
+.contenedor-main {
+  @apply w-full max-w-[1180px] m-auto  pt-24 min-h-screen;
 }

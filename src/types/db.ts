@@ -30,3 +30,10 @@ export type IProductoJovany = {
   code: string | null;
   imagen: number;
 };
+
+export type IUsuarios = {
+  usuario_ID: number;
+  usuario_nick: string;
+  usuario_password: string;
+  usuario_creacion: string;
+};
