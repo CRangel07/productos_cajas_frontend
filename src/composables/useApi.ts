@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { useAuthStore } from "../stores/authStore";
 // import { useAuthStore } from "../stores/authStore";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -53,11 +54,10 @@ export const useApi = () => {
       const response = await fetch(url, fetchOptions);
 
       if (!response.ok) {
-        if (response.status === 401) {
-          // useAuthStore().logout();
-          return null;
-        }
         const errorBody = await response.text();
+        if (response.status === 401) {
+          useAuthStore().logout();
+        }
         throw new Error(
           `Error ${response.status}: ${response.statusText}\n${errorBody}`
         );

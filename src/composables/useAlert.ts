@@ -25,5 +25,18 @@ export const useAlert = () => {
     });
   };
 
-  return { confirm, alerta };
+  const notificacion = (opt: SweetAlertOptions) => {
+    return Swal.fire({
+      toast: true,
+      timer: 3000,
+      icon: "info",
+      showConfirmButton: false,
+      timerProgressBar: true,
+      position: "top-right",
+      showCloseButton: true,
+      ...opt,
+    });
+  };
+
+  return { confirm, alerta, notificacion };
 };

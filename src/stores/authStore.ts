@@ -3,11 +3,13 @@ import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { ILoginUsuario } from "../types/responses";
+import { useAlert } from "../composables/useAlert";
 
 export const useAuthStore = defineStore("regp_store_auth", () => {
   const LocalKey = "session_info_regp_azteca";
 
   const router = useRouter();
+  const alertas = useAlert();
 
   const { apiFetch, error, loading } = useApi();
 
@@ -29,6 +31,10 @@ export const useAuthStore = defineStore("regp_store_auth", () => {
       usuario.value = responseLogin.usuario;
       localStorage.setItem(LocalKey, JSON.stringify(usuario.value));
       router.replace({ name: "regp_registro_page" });
+      alertas.notificacion({
+        icon: "success",
+        text: `Bienvenido ${usuario.value.usuario_nick}`,
+      });
     }
   };
 
@@ -39,6 +45,7 @@ export const useAuthStore = defineStore("regp_store_auth", () => {
 
     if (responseLogout && error.value === null) {
       localStorage.removeItem(LocalKey);
+      usuario.value = null;
       router.replace({ name: "regp_login" });
     }
   };

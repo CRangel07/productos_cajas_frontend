@@ -1,18 +1,22 @@
 <template>
   <div class="grow h-[80vh] relative">
-    <div class="mb-3 flex flex-wrap max-w-[500px] gap-2">
+    <form
+      @submit.prevent="emit('buscarProducto', busqueda)"
+      class="mb-3 flex flex-wrap max-w-[500px] gap-2"
+    >
       <input
         type="text"
-        class="border py-1.5 px-4 rounded-lg border-slate-500 grow focus:border-blue-500 outline-none"
+        class="border py-1.5 px-4 rounded-lg border-slate-500 grow focus:border-blue-500 outline-none tracking-wider placeholder:font-normal text-slate-700"
         placeholder="Buscar por nombre o código"
+        v-model="busqueda"
       />
       <button
-        type="button"
+        type="submit"
         class="bg-blue-500 rounded text-blue-50 font-medium cursor-pointer px-2"
       >
         Buscar
       </button>
-    </div>
+    </form>
     <div class="overflow-auto h-full">
       <table
         class="w-full border border-slate-300 shadow-lg rounded-lg overflow-hidden"
@@ -42,13 +46,51 @@
                 colspan="3"
                 class="py-3 px-3 uppercase font-semibold text-lg relative text-slate-800"
               >
-                {{ p.producto_descripcion }}
-                <span
-                  class="font-medium text-xs absolute bottom-1 right-4 text-slate-800"
-                >
-                  Pasillo: {{ p.producto_pasillo }} · Piso:
-                  {{ p.producto_rack_nivel }}
-                </span>
+                <div class="flex justify-between items-center">
+                  <p class="flex flex-col">
+                    <span>
+                      {{ p.producto_descripcion }}
+                    </span>
+                    <span class="text-xs text-slate-500">
+                      {{ formatDate(p.producto_registro) }}
+                    </span>
+                  </p>
+
+                  <div class="flex flex-col items-center">
+                    <div>
+                      <button
+                        v-if="editando !== p.producto_ID"
+                        title="Editar producto"
+                        type="button"
+                        class="border py-0.5 px-3 rounded-lg bg-yellow-400 border-yellow-500 cursor-pointer active:scale-95"
+                        @click="handleClick(true, p)"
+                      >
+                        <Pencil
+                          :size="20"
+                          :stroke-width="3"
+                          class="text-yellow-900"
+                        />
+                      </button>
+                      <button
+                        v-if="editando === p.producto_ID"
+                        title="Cancelar Edición"
+                        type="button"
+                        class="border py-0.5 px-3 rounded-lg bg-red-400 border-red-500 cursor-pointer active:scale-95"
+                        @click="handleClick(false, p)"
+                      >
+                        <XCircle
+                          :size="20"
+                          :stroke-width="3"
+                          class="text-yellow-900"
+                        />
+                      </button>
+                    </div>
+                    <span class="text-sm text-slate-500">
+                      Pasillo: {{ p.producto_pasillo }} · Piso:
+                      {{ p.producto_rack_nivel }}
+                    </span>
+                  </div>
+                </div>
               </td>
             </tr>
 
@@ -83,7 +125,28 @@
 </template>
 
 <script setup lang="ts">
+import { Pencil, XCircle } from "lucide-vue-next";
+import { formatDate } from "../utils/general";
 import { IProductoConPresentaciones } from "../types/responses";
+import { ref } from "vue";
+
+const busqueda = ref<string>("");
+const editando = ref<string>("");
 
 defineProps<{ productos: IProductoConPresentaciones[] }>();
+
+const emit = defineEmits<{
+  (e: "editarProducto", prod: IProductoConPresentaciones): void;
+  (e: "buscarProducto", busqueda: string): void;
+  (e: "cancelarEdicion"): void;
+}>();
+
+const handleClick = (flag: boolean, p?: IProductoConPresentaciones) => {
+  editando.value = flag ? p!.producto_ID : "";
+  if (editando.value) {
+    emit("editarProducto", p!);
+  } else {
+    emit("cancelarEdicion");
+  }
+};
 </script>
