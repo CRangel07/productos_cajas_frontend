@@ -128,12 +128,15 @@
 import { Pencil, XCircle } from "lucide-vue-next";
 import { formatDate } from "../utils/general";
 import { IProductoConPresentaciones } from "../types/responses";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const busqueda = ref<string>("");
 const editando = ref<string>("");
 
-defineProps<{ productos: IProductoConPresentaciones[] }>();
+const props = defineProps<{
+  productos: IProductoConPresentaciones[];
+  reset: boolean;
+}>();
 
 const emit = defineEmits<{
   (e: "editarProducto", prod: IProductoConPresentaciones): void;
@@ -149,4 +152,11 @@ const handleClick = (flag: boolean, p?: IProductoConPresentaciones) => {
     emit("cancelarEdicion");
   }
 };
+
+watch(
+  () => props.reset,
+  () => {
+    editando.value = "";
+  }
+);
 </script>

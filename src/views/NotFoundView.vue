@@ -24,7 +24,7 @@ import Nav from "../components/Nav.vue";
 const router = useRouter();
 
 const handleRuta = () => {
-  router.replace({ name: "regp_home" });
+  router.replace({ name: "regp_registro_page" });
 };
 </script>
 

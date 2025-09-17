@@ -156,7 +156,9 @@ const handleSubmit = async () => {
 watch(
   () => props.reset,
   (flag) => {
-    if (flag == 1) Object.assign(dataProducto, iniciarDatos());
+    if (flag == 1) {
+      Object.assign(dataProducto, iniciarDatos());
+    }
   }
 );
 
@@ -220,7 +222,7 @@ watch(
         return;
       }
 
-      if (oldCode === "" || oldCodeCaja === "") {
+      if ((oldCode === "" || oldCodeCaja === "") && !props.producto) {
         checkRelatedCode(code);
       }
     }, 400); // debounce de 400ms

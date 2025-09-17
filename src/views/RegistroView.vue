@@ -16,6 +16,7 @@
       />
       <TablaProductos
         :productos="productos"
+        :reset="resetEdicion"
         @editar-producto="(prod) => updateProducto(prod)"
         @cancelar-edicion="
           productoEditando = null;
@@ -47,6 +48,7 @@ const productoEditando = ref<{
   data: DataProducto;
 } | null>(null);
 const resetForm = ref<1 | 0>(0);
+const resetEdicion = ref<boolean>(false);
 
 const { apiFetch, error, loading } = useApi();
 const {
@@ -74,6 +76,7 @@ const insertProducto = async (data: DataProducto) => {
     });
     productoEditando.value = null;
     resetForm.value = 1;
+    resetEdicion.value = !resetEdicion.value;
   } else {
     alertas.alerta({ text: error.value, icon: "error" });
     resetForm.value = 0;
