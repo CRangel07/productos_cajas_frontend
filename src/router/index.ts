@@ -38,7 +38,7 @@ export const router: Router = createRouter({
   routes: rutasApp,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore();
   const alert = useAlert();
   const auth = authStore.autenticado;
