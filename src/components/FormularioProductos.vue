@@ -186,6 +186,7 @@ async function checkRelatedCode(code: string) {
       if (userResponse.isConfirmed) {
         dataProducto.descripcion = result.producto.nombre;
         dataProducto.piezasCaja = result.producto.unidad;
+        dataProducto.jovanyID = result.producto.id_producto;
       }
     } else {
       alert.notificacion({ text: "No se encontró un producto con ese código" });
