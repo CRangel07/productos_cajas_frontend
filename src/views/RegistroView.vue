@@ -16,8 +16,11 @@
       />
       <TablaProductos
         :productos="productos"
+        :error-delete="errorDelete"
+        :loading-delete="loadingDelete"
         :reset="resetEdicion"
         @editar-producto="(prod) => updateProducto(prod)"
+        @eliminar-producto="(prod) => deleteProducto(prod)"
         @cancelar-edicion="
           productoEditando = null;
           resetForm = 1;
@@ -55,6 +58,11 @@ const {
   apiFetch: fetchProducts,
   loading: loadingProductos,
   error: errorProducts,
+} = useApi();
+const {
+  apiFetch: makeDelete,
+  error: errorDelete,
+  loading: loadingDelete,
 } = useApi();
 
 const insertProducto = async (data: DataProducto) => {
@@ -107,6 +115,27 @@ const updateProducto = async (prodToEdit: IProductoConPresentaciones) => {
   };
 };
 
+const deleteProducto = async (prodToDelete: IProductoConPresentaciones) => {
+  const deleteResponse = await makeDelete("/producto", {
+    method: "DELETE",
+    body: {
+      id: prodToDelete.producto_ID,
+    },
+  });
+
+  if (deleteResponse && errorDelete.value == null) {
+    alertas.notificacion({
+      icon: "info",
+      text: `Se eliminó correctamente ${prodToDelete.producto_descripcion}`,
+    });
+
+    productos.value = productos.value.filter(
+      (p) => p.producto_ID !== prodToDelete.producto_ID
+    );
+    resetEdicion.value = !resetEdicion.value;
+  }
+};
+
 const getProducts = async (busqueda?: string) => {
   const pResponse = await fetchProducts<{
     productos: IProductoConPresentaciones[];
@@ -114,7 +143,9 @@ const getProducts = async (busqueda?: string) => {
   if (pResponse && errorProducts.value === null) {
     productos.value = pResponse.productos;
   } else {
-    alert("Error al obtener lista: " + errorProducts.value);
+    alertas.notificacion({
+      text: "Error al obtener productos" + "\n" + errorProducts.value,
+    });
   }
 };
 

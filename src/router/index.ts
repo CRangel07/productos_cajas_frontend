@@ -13,6 +13,10 @@ import { useAlert } from "../composables/useAlert";
 
 const rutasApp: RouteRecordRaw[] = [
   {
+    path: "/",
+    redirect: { name: "regp_registro_page" },
+  },
+  {
     path: "/login",
     component: LoginLayout,
     name: "regp_login",

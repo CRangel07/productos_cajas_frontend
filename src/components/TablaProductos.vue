@@ -57,7 +57,8 @@
                   </p>
 
                   <div class="flex flex-col items-center">
-                    <div>
+                    <!-- Botones -->
+                    <div class="flex gap-1 mb-1.5">
                       <button
                         v-if="editando !== p.producto_ID"
                         title="Editar producto"
@@ -75,7 +76,7 @@
                         v-if="editando === p.producto_ID"
                         title="Cancelar Edición"
                         type="button"
-                        class="border py-0.5 px-3 rounded-lg bg-red-400 border-red-500 cursor-pointer active:scale-95"
+                        class="border py-0.5 px-3 rounded-lg bg-orange-400 border-orange-500 cursor-pointer active:scale-95"
                         @click="handleClick(false, p)"
                       >
                         <XCircle
@@ -84,7 +85,32 @@
                           class="text-yellow-900"
                         />
                       </button>
+                      <button
+                        v-if="p.producto_ID"
+                        title="Eliminar Producto"
+                        type="button"
+                        class="border py-0.5 px-3 rounded-lg bg-red-400 border-red-500 cursor-pointer active:scale-95"
+                        @click="handleDelete(p)"
+                      >
+                        <Trash
+                          :size="20"
+                          :stroke-width="3"
+                          class="text-yellow-900"
+                        />
+                      </button>
                     </div>
+                    <p
+                      v-if="loadingDelete && eliminando === p.producto_ID"
+                      class="text-sm text-slate-600 font-medium"
+                    >
+                      Eliminando producto...
+                    </p>
+                    <p
+                      v-if="errorDelete && eliminando === p.producto_ID"
+                      class="api-error text-xs! w-[500px]!"
+                    >
+                      {{ errorDelete }}
+                    </p>
                     <span class="text-sm text-slate-500">
                       Pasillo: {{ p.producto_pasillo }} · Piso:
                       {{ p.producto_rack_nivel }}
@@ -125,21 +151,27 @@
 </template>
 
 <script setup lang="ts">
-import { Pencil, XCircle } from "lucide-vue-next";
-import { formatDate } from "../utils/general";
-import { IProductoConPresentaciones } from "../types/responses";
+import { useAlert } from "../composables/useAlert";
 import { ref, watch } from "vue";
+import { formatDate } from "../utils/general";
+import { Pencil, Trash, XCircle } from "lucide-vue-next";
+import { IProductoConPresentaciones } from "../types/responses";
 
+const alertas = useAlert();
 const busqueda = ref<string>("");
 const editando = ref<string>("");
+const eliminando = ref<string>("");
 
 const props = defineProps<{
   productos: IProductoConPresentaciones[];
+  loadingDelete: boolean;
+  errorDelete: string | null;
   reset: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: "editarProducto", prod: IProductoConPresentaciones): void;
+  (e: "eliminarProducto", prod: IProductoConPresentaciones): void;
   (e: "buscarProducto", busqueda: string): void;
   (e: "cancelarEdicion"): void;
 }>();
@@ -153,9 +185,23 @@ const handleClick = (flag: boolean, p?: IProductoConPresentaciones) => {
   }
 };
 
+const handleDelete = async (p: IProductoConPresentaciones) => {
+  const userRes = await alertas.confirm({
+    text: `¿Estás seguro que deseas eliminar ${p.producto_descripcion} definitivamente?`,
+  });
+
+  editando.value = "";
+  eliminando.value = p.producto_ID;
+
+  if (userRes.isConfirmed) {
+    emit("eliminarProducto", p);
+  }
+};
+
 watch(
   () => props.reset,
   () => {
+    eliminando.value = "";
     editando.value = "";
   }
 );

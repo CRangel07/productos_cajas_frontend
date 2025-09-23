@@ -39,6 +39,7 @@ type EntradaOptions = Partial<{
   maxlength: number;
   placeholder: string;
   step: number;
+  autocomplete: string;
 }> & {
   type: TipoEntrada;
   required: boolean;

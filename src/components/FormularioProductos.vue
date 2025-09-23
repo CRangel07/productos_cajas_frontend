@@ -1,5 +1,11 @@
 <template>
   <div class="w-full max-w-[300px]">
+    <p
+      v-if="producto"
+      class="bg-yellow-400 text-center text-lg mb-2 font-medium text-yellow-900 py-0.5 rounded"
+    >
+      Editando {{ producto.data.descripcion }}
+    </p>
     <form @submit.prevent="handleSubmit" class="flex flex-col gap-5">
       <Entrada
         label="Código de Caja"
@@ -9,6 +15,7 @@
           disabled: false,
           icono: ScanBarcode,
           required: true,
+          autocomplete: 'off',
           type: 'text',
         }"
       />
@@ -20,6 +27,7 @@
           id: 'reg_codigo',
           disabled: false,
           icono: ScanBarcode,
+          autocomplete: 'off',
           required: true,
           type: 'text',
         }"
@@ -32,6 +40,7 @@
           id: 'reg_descripcion',
           disabled: false,
           icono: ReceiptText,
+          autocomplete: 'off',
           required: true,
           type: 'text',
         }"
@@ -45,6 +54,7 @@
           disabled: false,
           icono: Hash,
           required: true,
+          autocomplete: 'off',
           type: 'number',
           step: 1,
           max: 100,
@@ -60,6 +70,7 @@
           disabled: false,
           icono: Hash,
           required: true,
+          autocomplete: 'off',
           type: 'number',
           step: 1,
           max: 50,
@@ -72,6 +83,7 @@
         :opt="{
           id: 'reg_piso',
           disabled: false,
+          autocomplete: 'off',
           icono: Hash,
           required: true,
           type: 'number',
