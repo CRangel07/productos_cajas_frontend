@@ -144,6 +144,16 @@
               </td>
             </tr>
           </template>
+          <!-- Empty State -->
+          <tr v-if="!productos.length">
+            <td
+              colspan="3"
+              class="text-center font-medium text-orange-500 py-5"
+            >
+              No se encontraron productos
+              {{ busqueda ? "para " + busqueda : "" }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

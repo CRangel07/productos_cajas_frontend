@@ -9,12 +9,15 @@ export type IProductos = {
 
 export type ITipoPresentacion = "PIEZA" | "CAJA" | "TARIMA";
 
+export type ITipoCodigo = "UPC-A" | "EAN-13" | "EAN-14" | "EAN-8";
+
 export type IPresentacion = {
   presentacion_ID: string;
   presentacion_producto: string;
   presentacion_tipo: ITipoPresentacion;
   presentacion_codigo_barras: string;
   presentacion_cantidad: number;
+  presentacion_tipo_codigo: ITipoCodigo | null;
 };
 
 export type IProductoJovany = {

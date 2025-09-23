@@ -23,7 +23,7 @@
         @eliminar-producto="(prod) => deleteProducto(prod)"
         @cancelar-edicion="
           productoEditando = null;
-          resetForm = 1;
+          resetForm = !resetForm;
         "
         @buscar-producto="(busqueda) => getProducts(busqueda)"
       />
@@ -50,7 +50,7 @@ const productoEditando = ref<{
   idCaja: string;
   data: DataProducto;
 } | null>(null);
-const resetForm = ref<1 | 0>(0);
+const resetForm = ref<boolean>(false);
 const resetEdicion = ref<boolean>(false);
 
 const { apiFetch, error, loading } = useApi();
@@ -83,11 +83,11 @@ const insertProducto = async (data: DataProducto) => {
       text: `Se guardó correctamente ${data.descripcion.toUpperCase()}`,
     });
     productoEditando.value = null;
-    resetForm.value = 1;
+    resetForm.value = !resetForm.value;
     resetEdicion.value = !resetEdicion.value;
   } else {
     alertas.alerta({ text: error.value, icon: "error" });
-    resetForm.value = 0;
+    resetForm.value = !resetForm.value;
   }
 };
 
@@ -132,6 +132,9 @@ const deleteProducto = async (prodToDelete: IProductoConPresentaciones) => {
     productos.value = productos.value.filter(
       (p) => p.producto_ID !== prodToDelete.producto_ID
     );
+    productoEditando.value = null;7501008497593
+    
+    resetForm.value = !resetForm.value;
     resetEdicion.value = !resetEdicion.value;
   }
 };

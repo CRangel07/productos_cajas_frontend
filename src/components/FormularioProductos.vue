@@ -125,7 +125,7 @@ const props = defineProps<{
   cargando: boolean;
   error: string | null;
   producto: { id: string; data: DataProducto } | null;
-  reset: 1 | 0;
+  reset: boolean;
 }>();
 const emit = defineEmits<{ (e: "submit", data: DataProducto): void }>();
 
@@ -167,10 +167,8 @@ const handleSubmit = async () => {
 // Watch de reset props
 watch(
   () => props.reset,
-  (flag) => {
-    if (flag == 1) {
-      Object.assign(dataProducto, iniciarDatos());
-    }
+  () => {
+    Object.assign(dataProducto, iniciarDatos());
   }
 );
 
