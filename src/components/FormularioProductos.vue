@@ -115,8 +115,8 @@ import { useApi } from "../composables/useApi";
 import { useAlert } from "../composables/useAlert";
 import { DataProducto } from "../types/forms";
 import { reactive, watch } from "vue";
-import { Hash, ReceiptText, ScanBarcode } from "lucide-vue-next";
 import { IProductoJovany } from "../types/db";
+import { Hash, ReceiptText, ScanBarcode } from "lucide-vue-next";
 
 const alert = useAlert();
 const { apiFetch } = useApi();
@@ -135,8 +135,8 @@ const iniciarDatos = (): DataProducto => ({
   codigoCaja: "",
   piezasCaja: null,
   descripcion: "",
-  pasillo: null,
-  piso: null,
+  pasillo: 1,
+  piso: 1,
 });
 
 const dataProducto = reactive<DataProducto>(iniciarDatos());

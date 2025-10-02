@@ -5,7 +5,7 @@
     <p v-if="authStore.error" class="api-error">{{ authStore.error }}</p>
     <form
       @submit.prevent="handleSubmit"
-      class="bg-white flex p-5 shadow rounded-lg"
+      class="bg-white flex flex-col gap-2 lg:gap-3 lg:flex-row p-5 shadow rounded-lg"
     >
       <input
         v-model="data.usuario"
@@ -16,14 +16,14 @@
       />
       <input
         v-model="data.contrasena"
-        class="border px-2 border-slate-400 rounded py-1.5 ms-2"
+        class="border px-2 border-slate-400 rounded py-1.5"
         type="password"
         placeholder="Contraseña"
         required
       />
       <button
         type="submit"
-        class="bg-lime-500 text-lime-50 font-semibold ml-2 px-2 py-1.5 rounded cursor-pointer"
+        class="bg-lime-500 text-lime-50 font-semibold px-2 py-1.5 rounded cursor-pointer"
         :disabled="authStore.loading"
       >
         Ingresar
