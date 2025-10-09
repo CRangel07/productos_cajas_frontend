@@ -6,7 +6,7 @@
     >
       <input
         type="text"
-        class="border py-1.5 px-4 rounded-lg border-slate-500 grow focus:border-blue-500 outline-none tracking-wider placeholder:font-normal text-slate-700"
+        class="border lg:py-1.5 lg:px-4 py-0.5 px-2 rounded-lg border-slate-500 grow focus:border-blue-500 outline-none tracking-wider placeholder:font-normal text-slate-700"
         placeholder="Buscar por nombre o código"
         v-model="busqueda"
       />
@@ -19,23 +19,23 @@
     </form>
     <div class="overflow-auto h-full">
       <table
-        class="w-full border border-slate-300 shadow-lg rounded-lg overflow-hidden"
+        class="w-full border text-xs md:text-sm lg:text-base border-slate-300 shadow-lg rounded-lg overflow-hidden"
       >
         <thead class="sticky top-0 z-10">
           <tr>
             <th
               colspan="3"
-              class="bg-gradient-to-r from-slate-800 to-slate-600 text-slate-50 py-3 px-4 text-lg font-bold text-center tracking-wide"
+              class="bg-gradient-to-r from-slate-800 to-slate-600 text-slate-50 py-3 px-4 font-bold text-center tracking-wide text-sm lg:text-base uppercase"
             >
               Tabla de productos
             </th>
           </tr>
           <tr
-            class="bg-gradient-to-r from-slate-800 to-slate-600 text-slate-50 uppercase text-sm"
+            class="bg-gradient-to-r from-slate-800 to-slate-600 text-slate-50 uppercase"
           >
-            <th class="py-2 px-3">Unidad</th>
-            <th class="py-2 px-3">Código</th>
-            <th class="py-2 px-3">Cantidad</th>
+            <th class="py-2 px-3 text-xs md:text-sm lg:text-base">Unidad</th>
+            <th class="py-2 px-3 text-xs md:text-sm lg:text-base">Código</th>
+            <th class="py-2 px-3 text-xs md:text-sm lg:text-base">Cantidad</th>
           </tr>
         </thead>
         <tbody>
@@ -48,10 +48,10 @@
               >
                 <div class="flex justify-between items-center">
                   <p class="flex flex-col">
-                    <span>
+                    <span class="text-sm lg:text-lg">
                       {{ p.producto_descripcion }}
                     </span>
-                    <span class="text-xs text-slate-500">
+                    <span class="text-xs lg:text-sm text-slate-500">
                       {{ formatDate(p.producto_registro) }}
                     </span>
                   </p>
@@ -63,11 +63,11 @@
                         v-if="editando !== p.producto_ID"
                         title="Editar producto"
                         type="button"
-                        class="border py-0.5 px-3 rounded-lg bg-yellow-400 border-yellow-500 cursor-pointer active:scale-95"
+                        class="border py-0.5 lg:px-3 px-1 rounded-lg bg-yellow-400 border-yellow-500 cursor-pointer active:scale-95"
                         @click="handleClick(true, p)"
                       >
                         <Pencil
-                          :size="20"
+                          :size="18"
                           :stroke-width="3"
                           class="text-yellow-900"
                         />
@@ -76,11 +76,11 @@
                         v-if="editando === p.producto_ID"
                         title="Cancelar Edición"
                         type="button"
-                        class="border py-0.5 px-3 rounded-lg bg-orange-400 border-orange-500 cursor-pointer active:scale-95"
+                        class="border py-0.5 lg:px-3 px-1 rounded-lg bg-orange-400 border-orange-500 cursor-pointer active:scale-95"
                         @click="handleClick(false, p)"
                       >
                         <XCircle
-                          :size="20"
+                          :size="18"
                           :stroke-width="3"
                           class="text-yellow-900"
                         />
@@ -89,11 +89,11 @@
                         v-if="p.producto_ID"
                         title="Eliminar Producto"
                         type="button"
-                        class="border py-0.5 px-3 rounded-lg bg-red-400 border-red-500 cursor-pointer active:scale-95"
+                        class="border py-0.5 lg:px-3 px-1 rounded-lg bg-red-400 border-red-500 cursor-pointer active:scale-95"
                         @click="handleDelete(p)"
                       >
                         <Trash
-                          :size="20"
+                          :size="18"
                           :stroke-width="3"
                           class="text-yellow-900"
                         />
@@ -101,7 +101,7 @@
                     </div>
                     <p
                       v-if="loadingDelete && eliminando === p.producto_ID"
-                      class="text-sm text-slate-600 font-medium"
+                      class="text-xs text-slate-600 font-medium"
                     >
                       Eliminando producto...
                     </p>
@@ -111,7 +111,7 @@
                     >
                       {{ errorDelete }}
                     </p>
-                    <span class="text-sm text-slate-500">
+                    <span class="text-xs lg:text-sm text-slate-500">
                       Pasillo: {{ p.producto_pasillo }} · Piso:
                       {{ p.producto_rack_nivel }}
                     </span>
@@ -128,17 +128,17 @@
               class="hover:bg-slate-50 transition-colors"
             >
               <td
-                class="py-2 px-3 border-t border-r border-slate-200 text-center font-medium text-slate-800"
+                class="py-2 px-3 border-t border-r border-slate-200 text-center text-xs md:text-sm lg:text-base font-medium text-slate-800"
               >
                 {{ pre.presentacion_tipo }}
               </td>
               <td
-                class="py-2 px-3 border-t border-r text-xl font-extralight text-center border-slate-200 text-slate-800 font-['Consolas']"
+                class="py-2 px-3 border-t border-r text-lg lg:text-xl font-extralight text-center border-slate-200 text-slate-800 font-['Consolas']"
               >
                 {{ pre.presentacion_codigo_barras }}
               </td>
               <td
-                class="py-2 px-3 border-t border-slate-200 text-center font-medium text-slate-800"
+                class="py-2 px-3 border-t text-xs md:text-sm lg:text-base border-slate-200 text-center font-medium text-slate-800"
               >
                 {{ pre.presentacion_cantidad }} pz
               </td>

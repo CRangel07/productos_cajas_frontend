@@ -7,5 +7,5 @@
 }
 
 .contenedor-main {
-  @apply w-full max-w-[1180px] m-auto  pt-24 min-h-screen;
+  @apply w-full max-w-[1180px] m-auto pt-8 lg:pt-24 min-h-screen;
 }
