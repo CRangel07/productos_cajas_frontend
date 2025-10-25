@@ -5,5 +5,6 @@ export type DataProducto = {
   descripcion: string;
   pasillo: number | null;
   piso: number | null;
+  listo: boolean | null;
   jovanyID?: number | null;
 };

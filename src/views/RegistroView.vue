@@ -26,6 +26,7 @@
           resetForm = !resetForm;
         "
         @buscar-producto="(busqueda) => getProducts(busqueda)"
+        @marcar-listo="(prod) => handleMarcarListo(prod)"
       />
     </div>
   </div>
@@ -91,7 +92,7 @@ const insertProducto = async (data: DataProducto) => {
   }
 };
 
-const updateProducto = async (prodToEdit: IProductoConPresentaciones) => {
+const updateProducto = (prodToEdit: IProductoConPresentaciones) => {
   const codigoPieza = prodToEdit.presentaciones.find(
     (p) => p.presentacion_tipo === "PIEZA"
   )!;
@@ -106,6 +107,7 @@ const updateProducto = async (prodToEdit: IProductoConPresentaciones) => {
     pasillo: prodToEdit.producto_pasillo,
     piezasCaja: codigoCaja.presentacion_cantidad,
     piso: prodToEdit.producto_rack_nivel,
+    listo: !!prodToEdit.producto_listo,
   };
   productoEditando.value = {
     id: prodToEdit.producto_ID,
@@ -113,6 +115,15 @@ const updateProducto = async (prodToEdit: IProductoConPresentaciones) => {
     idPz: codigoPieza.presentacion_ID,
     data: dataProducto,
   };
+};
+
+const handleMarcarListo = (prod: IProductoConPresentaciones) => {
+  const pEdit: IProductoConPresentaciones = {
+    ...prod,
+    producto_listo: !!!prod.producto_listo,
+  };
+  updateProducto(pEdit);
+  insertProducto(productoEditando.value?.data!);
 };
 
 const deleteProducto = async (prodToDelete: IProductoConPresentaciones) => {
@@ -132,8 +143,8 @@ const deleteProducto = async (prodToDelete: IProductoConPresentaciones) => {
     productos.value = productos.value.filter(
       (p) => p.producto_ID !== prodToDelete.producto_ID
     );
-    productoEditando.value = null;7501008497593
-    
+    productoEditando.value = null;
+
     resetForm.value = !resetForm.value;
     resetEdicion.value = !resetEdicion.value;
   }

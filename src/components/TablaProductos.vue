@@ -41,7 +41,7 @@
         <tbody>
           <template v-for="(p, i) in productos" :key="p.producto_ID">
             <!-- Fila de título del producto -->
-            <tr :class="i % 2 === 0 ? 'bg-indigo-100' : 'bg-teal-100'">
+            <tr :class="i % 2 === 0 ? 'bg-indigo-200' : 'bg-pink-200'">
               <td
                 colspan="3"
                 class="py-3 px-3 uppercase font-semibold text-lg relative text-slate-800"
@@ -51,7 +51,13 @@
                     <span class="text-sm lg:text-lg">
                       {{ p.producto_descripcion }}
                     </span>
-                    <span class="text-xs lg:text-sm text-slate-500">
+                    <span
+                      v-if="!!p.producto_listo"
+                      class="bg-orange-400 select-none text-white w-full text-center px-5 py-1 rounded-md my-2"
+                    >
+                      LISTO
+                    </span>
+                    <span class="text-xs lg:text-sm text-slate-700">
                       {{ formatDate(p.producto_registro) }}
                     </span>
                   </p>
@@ -98,6 +104,19 @@
                           class="text-yellow-900"
                         />
                       </button>
+                      <button
+                        v-if="p.producto_ID"
+                        title="Marcar como listo"
+                        type="button"
+                        class="border py-0.5 lg:px-3 px-1 rounded-lg bg-lime-400 border-lime-500 cursor-pointer active:scale-95"
+                        @click="emit('marcarListo', p)"
+                      >
+                        <Check
+                          :size="18"
+                          :stroke-width="3"
+                          class="text-lime-800"
+                        />
+                      </button>
                     </div>
                     <p
                       v-if="loadingDelete && eliminando === p.producto_ID"
@@ -124,7 +143,7 @@
             <tr
               :key="pre.presentacion_ID"
               v-for="pre in p.presentaciones"
-              :class="i % 2 === 0 ? 'bg-indigo-50/70' : 'bg-teal-50/50'"
+              :class="i % 2 === 0 ? 'bg-indigo-50/70' : 'bg-pink-100/50'"
               class="hover:bg-slate-50 transition-colors"
             >
               <td
@@ -164,7 +183,7 @@
 import { useAlert } from "../composables/useAlert";
 import { ref, watch } from "vue";
 import { formatDate } from "../utils/general";
-import { Pencil, Trash, XCircle } from "lucide-vue-next";
+import { Check, Pencil, Trash, XCircle } from "lucide-vue-next";
 import { IProductoConPresentaciones } from "../types/responses";
 
 const alertas = useAlert();
@@ -181,6 +200,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "editarProducto", prod: IProductoConPresentaciones): void;
+  (e: "marcarListo", prod: IProductoConPresentaciones): void;
   (e: "eliminarProducto", prod: IProductoConPresentaciones): void;
   (e: "buscarProducto", busqueda: string): void;
   (e: "cancelarEdicion"): void;

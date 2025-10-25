@@ -137,6 +137,7 @@ const iniciarDatos = (): DataProducto => ({
   descripcion: "",
   pasillo: 1,
   piso: 1,
+  listo: false,
 });
 
 const dataProducto = reactive<DataProducto>(iniciarDatos());

@@ -5,6 +5,7 @@ export type IProductos = {
   producto_pasillo: number;
   producto_rack_nivel: number;
   producto_registro: string;
+  producto_listo: 1 | 0 | boolean
 };
 
 export type ITipoPresentacion = "PIEZA" | "CAJA" | "TARIMA";
