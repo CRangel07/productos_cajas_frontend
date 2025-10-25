@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full max-w-[200px]">
+  <div class="flex flex-col w-full max-w-[200px] mt-3">
     <button
       class="bg-green-600 gap-5 flex items-center text-green-50 font-medium py-1 px-3 mt-5 rounded-lg cursor-pointer active:scale-95 justify-center"
       title="Descargar un Excel con todos los productos"

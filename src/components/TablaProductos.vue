@@ -53,7 +53,7 @@
                     </span>
                     <span
                       v-if="!!p.producto_listo"
-                      class="bg-orange-400 select-none text-white w-full text-center px-5 py-1 rounded-md my-2"
+                      class="bg-orange-400 select-none text-white w-[100px] text-center px-5 py-1 rounded-md my-2"
                     >
                       LISTO
                     </span>
