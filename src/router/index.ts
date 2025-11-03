@@ -10,6 +10,7 @@ import NotFoundView from "../views/NotFoundView.vue";
 import LoginLayout from "../layouts/LoginLayout.vue";
 import { useAuthStore } from "../stores/authStore";
 import { useAlert } from "../composables/useAlert";
+import LineasView from "../views/LineasView.vue";
 
 const rutasApp: RouteRecordRaw[] = [
   {
@@ -22,11 +23,12 @@ const rutasApp: RouteRecordRaw[] = [
     name: "regp_login",
   },
   {
-    path: "/lista",
+    path: "",
     component: ProductosLayout,
     name: "regp_home",
     children: [
       { path: "", component: RegistroView, name: "regp_registro_page" },
+      { path: "lineas", component: LineasView, name: "regp_registro_lineas" },
     ],
     meta: { reqAuth: true },
   },
@@ -40,6 +42,7 @@ const rutasApp: RouteRecordRaw[] = [
 export const router: Router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), // más flexible
   routes: rutasApp,
+  linkExactActiveClass: "text-cyan-200! font-medium!"
 });
 
 router.beforeEach((to, _from, next) => {

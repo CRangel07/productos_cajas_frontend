@@ -41,3 +41,9 @@ export type IUsuarios = {
   usuario_password: string;
   usuario_creacion: string;
 };
+
+export type ILinea = {
+  linea_ID: number
+  linea_compucaja_ID: string
+  linea_descripcion: string
+}

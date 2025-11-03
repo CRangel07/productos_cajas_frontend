@@ -7,7 +7,16 @@
         <h1 class="text-sm lg:text-2xl font-semibold uppercase text-slate-50">
           Registro Productos con Caja
         </h1>
-        <nav class="text-white text-xs lg:text-sm">
+        <nav class="text-white text-xs lg:text-sm flex gap-2">
+          <ul v-if="enlaces.length" class="flex gap-2">
+            <RouterLink
+              v-for="e in enlaces"
+              :key="e.ruta"
+              :to="{ name: e.ruta }"
+            >
+              {{ e.texto }}
+            </RouterLink>
+          </ul>
           <button type="button" @click="authStore.logout()">
             Cerrar Sesión
           </button>
@@ -21,4 +30,9 @@
 import { useAuthStore } from "../stores/authStore";
 
 const authStore = useAuthStore();
+
+const enlaces: { ruta: string; texto: string }[] = [
+  { ruta: "regp_registro_page", texto: "Registro" },
+  { ruta: "regp_registro_lineas", texto: "Lineas" },
+];
 </script>
