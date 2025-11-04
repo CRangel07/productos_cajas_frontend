@@ -2,18 +2,36 @@
   <div class="contenedor-main">
     <SubirLineasTXT />
     <p v-if="error" class="api-error">{{ error }}</p>
-    <pre>{{ lineas }}</pre>
+
+    <form></form>
+    <Selector
+      :config="{ disabled: false, id: 'reg_productos_select', required: true }"
+      :icono="TableOfContents"
+      :opt="lineasOpt"
+      label="Selecciona Linea a traer"
+      v-model="linea"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
 import { useApi } from "../composables/useApi";
 import { ILinea } from "../types/db";
+import { TableOfContents } from "lucide-vue-next";
+import { computed, onBeforeMount, ref } from "vue";
+
+import Selector, { SelectOpt } from "../components/Selector.vue";
 import SubirLineasTXT from "../components/SubirLineasTXT.vue";
 
-const lineas = ref<ILinea[]>([]);
+const linea = ref<any>();
 
+const lineas = ref<ILinea[]>([]);
+const lineasOpt = computed(() =>
+  lineas.value.map<SelectOpt>((l) => ({
+    label: `${l.linea_compucaja_ID} | ${l.linea_descripcion}`,
+    value: l.linea_compucaja_ID,
+  }))
+);
 const { apiFetch, error, loading } = useApi();
 
 onBeforeMount(async () => {
