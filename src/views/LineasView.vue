@@ -1,6 +1,7 @@
 <template>
   <div class="contenedor-main">
     <SubirLineasTXT />
+    <SubirLineasDesc />
     <p v-if="error" class="api-error">{{ error }}</p>
 
     <form @submit.prevent="" class="flex items-end gap-3">
@@ -28,6 +29,7 @@ import { computed, onBeforeMount, ref } from "vue";
 
 import Selector, { SelectOpt } from "../components/Selector.vue";
 import SubirLineasTXT from "../components/SubirLineasTXT.vue";
+import SubirLineasDesc from "../components/SubirLineasDesc.vue";
 
 const linea = ref<any>();
 
