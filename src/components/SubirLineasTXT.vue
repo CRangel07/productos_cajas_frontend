@@ -54,9 +54,11 @@
           type="button"
           class="text-white text-sm bg-cyan-500 py-1 px-2 rounded-md ms-auto block mt-2 cursor-pointer"
           @click.stop="handleSubmit"
+          :disabled="loading"
         >
           Guardar
         </button>
+        <p v-if="loading">Guardando espera...</p>
       </div>
     </div>
 

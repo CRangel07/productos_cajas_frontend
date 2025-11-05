@@ -3,14 +3,20 @@
     <SubirLineasTXT />
     <p v-if="error" class="api-error">{{ error }}</p>
 
-    <form></form>
-    <Selector
-      :config="{ disabled: false, id: 'reg_productos_select', required: true }"
-      :icono="TableOfContents"
-      :opt="lineasOpt"
-      label="Selecciona Linea a traer"
-      v-model="linea"
-    />
+    <form @submit.prevent="" class="flex items-end gap-3">
+      <Selector
+        :config="{
+          disabled: false,
+          id: 'reg_productos_select',
+          required: true,
+        }"
+        :icono="TableOfContents"
+        :opt="lineasOpt"
+        label="Selecciona Linea a traer"
+        v-model="linea"
+      />
+      <button type="submit" class="bg-red-100">Obtener</button>
+    </form>
   </div>
 </template>
 
