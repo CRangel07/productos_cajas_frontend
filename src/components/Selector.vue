@@ -43,7 +43,7 @@ type SelectConfig = {
 
 export type SelectOpt = {
   label: string;
-  value: string | number;
+  value: string | number | null;
 };
 
 const props = defineProps<{

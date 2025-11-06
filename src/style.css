@@ -6,6 +6,10 @@
   @apply bg-rose-200 text-rose-700 border border-rose-600 text-center whitespace-pre-line rounded-md mb-4 px-2 py-2.5;
 }
 
+.api-loading {
+  @apply bg-yellow-200 text-yellow-700 border border-yellow-600 text-center whitespace-pre-line rounded-md mb-4 px-2 py-2.5;
+}
+
 .contenedor-main {
   @apply w-full max-w-[1180px] m-auto pt-8 lg:pt-24 min-h-screen;
 }
