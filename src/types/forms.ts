@@ -8,3 +8,29 @@ export type DataProducto = {
   listo: boolean | null;
   jovanyID?: number | null;
 };
+
+export type ITipoPresentacion =
+  | "PIEZA"
+  | "CAJA"
+  | "TARIMA"
+  | "BULTO"
+  | "BOLSA"
+  | "PAQUETE"
+  | "EXHIBIDOR";
+
+export const ArrPresentaciones = [
+  "PIEZA",
+  "CAJA",
+  "TARIMA",
+  "BULTO",
+  "BOLSA",
+  "PAQUETE",
+  "EXHIBIDOR",
+];
+
+export type IFormPresentacion = {
+  idProducto: string | null;
+  codigo: string | null;
+  tipo: ITipoPresentacion | null;
+  cantidad: number | null;
+};

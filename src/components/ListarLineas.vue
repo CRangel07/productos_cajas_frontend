@@ -40,7 +40,7 @@
                   </span>
                 </div>
                 <div>
-                  <button @click="handleModal">Editar</button>
+                  <button @click="handleModal(prod)">Editar</button>
                 </div>
               </div>
             </td>
@@ -81,10 +81,13 @@ defineProps<{ productos: IProductoConPresentaciones[] }>();
 
 const modalStore = useModalStore();
 
-const handleModal = () => {
+const handleModal = (prod: IProductoConPresentaciones) => {
   modalStore.openModal(RegistroProducto, {
     title: "Gestión de producto",
     width: "lg",
+    props: {
+      prod: prod,
+    },
   });
 };
 </script>
