@@ -1,5 +1,7 @@
 <template>
-  <div class="max-w-3xl m-auto overflow-x-auto rounded-lg shadow-lg bg-white mt-5">
+  <div
+    class="max-w-3xl m-auto overflow-x-auto rounded-lg shadow-lg bg-white mt-5"
+  >
     <table class="w-full border-collapse text-sm text-left">
       <thead class="bg-gray-800 sticky top-0 z-10">
         <tr>
@@ -44,7 +46,13 @@
                   </span>
                 </div>
                 <div>
-                  <button @click="handleModal(prod)">Editar</button>
+                  <button
+                    @click="handleModal(prod)"
+                    title="Abrir menú de producto"
+                    class="bg-yellow-400 p-1 rounded-md text-yellow-800 cursor-pointer"
+                  >
+                    <Menu :size="18" :stroke-width="2.5" />
+                  </button>
                 </div>
               </div>
             </td>
@@ -91,6 +99,7 @@
 </template>
 
 <script setup lang="ts">
+import { Menu, SquareMenu } from "lucide-vue-next";
 import { useModalStore } from "../stores/modalStore";
 import { IProductoConPresentaciones } from "../types/responses";
 import RegistroProducto from "./RegistroProducto.vue";

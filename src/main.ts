@@ -1,9 +1,12 @@
-import { createApp } from "vue";
-import "./style.css";
 import App from "./App.vue";
-import { Pinia, createPinia } from "pinia";
 import persistirPinia from "pinia-plugin-persistedstate";
+
 import { router } from "./router/index";
+import { createApp } from "vue";
+import { Pinia, createPinia } from "pinia";
+import { setupSocketHandlers } from "./config/socketHandlers";
+
+import "./style.css";
 
 const aplicacion = createApp(App);
 
@@ -14,5 +17,7 @@ pinia.use(persistirPinia);
 aplicacion.use(pinia);
 
 aplicacion.use(router);
+
+setupSocketHandlers();
 
 aplicacion.mount("#app");
