@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full overflow-x-auto rounded-lg shadow-lg bg-white">
+  <div class="max-w-3xl m-auto overflow-x-auto rounded-lg shadow-lg bg-white mt-5">
     <table class="w-full border-collapse text-sm text-left">
       <thead class="bg-gray-800 sticky top-0 z-10">
         <tr>
@@ -21,7 +21,11 @@
         </tr>
       </thead>
       <tbody>
-        <template v-for="(prod, i) in productos" :key="prod.producto_ID">
+        <template
+          v-if="productos.length"
+          v-for="(prod, i) in productos"
+          :key="prod.producto_ID"
+        >
           <!-- Fila de encabezado del producto -->
           <tr
             :class="[
@@ -47,7 +51,9 @@
           </tr>
 
           <!-- Filas de presentaciones -->
+
           <tr
+            v-if="prod.presentaciones.length"
             v-for="pre in prod.presentaciones"
             :key="pre.presentacion_ID"
             class="transition-colors duration-200 hover:bg-gray-50"
@@ -66,7 +72,19 @@
               {{ pre.presentacion_cantidad }}
             </td>
           </tr>
+          <tr v-else class="text-center text-slate-600">
+            <td colspan="3" class="text-sm font-medium py-2">
+              Sin presentaciones
+            </td>
+          </tr>
         </template>
+        <tr v-else>
+          <td colspan="3">
+            <p class="text-slate-400 font-medium text-center py-5 text-md">
+              Sin productos, Selecciona productos a obtener y presiona obtener
+            </p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

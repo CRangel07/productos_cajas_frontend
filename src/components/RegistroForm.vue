@@ -60,27 +60,41 @@
 <script setup lang="ts">
 import Entrada from "./Entrada.vue";
 import Selector, { SelectOpt } from "./Selector.vue";
+import ErrorMessage from "./ErrorMessage.vue";
 
+import { useApi } from "../composables/useApi";
 import { reactive } from "vue";
 import { Package2, ScanBarcode } from "lucide-vue-next";
 import { ArrPresentaciones, IFormPresentacion } from "../types/forms";
-import { useApi } from "../composables/useApi";
-import ErrorMessage from "./ErrorMessage.vue";
-import { IProductoConPresentaciones } from "../types/responses";
+import { IPresentacion } from "../types/db";
 
-const props = defineProps<{ prod: IProductoConPresentaciones }>();
+const props = defineProps<{
+  pre: IPresentacion | null;
+  prodId: string;
+}>();
 
 const emit = defineEmits<{
   (e: "submitForm", data: IFormPresentacion): void;
   (e: "cancelEdit"): void;
 }>();
 
-const initData = (): IFormPresentacion => ({
-  cantidad: null,
-  codigo: null,
-  tipo: "CAJA",
-  idProducto: props.prod.producto_ID,
-});
+const initData = (): IFormPresentacion => {
+  if (props.pre && props.prodId) {
+    return {
+      cantidad: props.pre.presentacion_cantidad,
+      codigo: props.pre.presentacion_codigo_barras,
+      tipo: props.pre.presentacion_tipo,
+      idProducto: props.prodId,
+    };
+  } else {
+    return {
+      cantidad: null,
+      codigo: null,
+      tipo: "CAJA",
+      idProducto: props.prodId,
+    };
+  }
+};
 
 const data = reactive<IFormPresentacion>(initData());
 

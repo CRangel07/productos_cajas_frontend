@@ -5,7 +5,7 @@
     >
       <div class="max-w-[1180px] m-auto flex items-center justify-between py-2">
         <h1 class="text-sm lg:text-2xl font-semibold uppercase text-slate-50">
-          Registro Productos con Caja
+          Registro Productos y Cajas
         </h1>
         <nav class="text-white text-xs lg:text-sm flex gap-2">
           <ul v-if="enlaces.length" class="flex gap-2">

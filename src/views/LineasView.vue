@@ -1,7 +1,26 @@
 <template>
   <div class="contenedor-main">
-    <SubirLineasTXT />
-    <SubirLineasDesc />
+    <div class="flex justify-start flex-wrap">
+      <SubirLineas
+        titulo="Subir Productos"
+        endpoint="/lineas"
+        :validaciones="{
+          linea1: 'cei-029s-2.6',
+          linea2: 'EXISTENCIA ACTUAL DE ARTICULOS',
+          mensajeError:
+            'Debe ser el archivo TXT de la Existencia actual de articulos incluyendo importes',
+        }"
+      />
+      <SubirLineas
+        titulo="Subir Lineas TXT"
+        endpoint="/lineas/descripcion"
+        :validaciones="{
+          linea1: 'cei-0299-2.6',
+          linea2: 'INVENTARIO POR LINEA',
+          mensajeError: 'Debe ser el archivo TXT de la INVENTARIO POR LINEA',
+        }"
+      />
+    </div>
     <p v-if="errorLineas" class="api-error">{{ errorLineas }}</p>
     <div>
       <p v-if="loadingLineas" class="api-loading">Cargando lineas...</p>
@@ -65,8 +84,7 @@ import { computed, onBeforeMount, reactive, ref, watch } from "vue";
 import Entrada from "../components/Entrada.vue";
 import Selector, { SelectOpt } from "../components/Selector.vue";
 import ListarLineas from "../components/ListarLineas.vue";
-import SubirLineasTXT from "../components/SubirLineasTXT.vue";
-import SubirLineasDesc from "../components/SubirLineasDesc.vue";
+import SubirLineas from "../components/SubirLineas.vue";
 
 const filtroBusqueda = reactive<{
   linea: number | null;
@@ -129,6 +147,7 @@ watch(
   () => filtroBusqueda.linea,
   () => {
     productos.value = [];
+    filtroBusqueda.busqueda = null;
   }
 );
 </script>

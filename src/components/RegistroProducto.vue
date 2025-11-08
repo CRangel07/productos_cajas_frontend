@@ -21,7 +21,8 @@
       class="mt-3"
       @submit-form="(data) => savePresentacion(data)"
       @cancel-edit="creando = false"
-      :prod="prod"
+      :pre="null"
+      :prod-id="prod.producto_ID"
     />
 
     <p class="text-md text-slate-600 my-3">Presentaciones</p>
@@ -35,13 +36,15 @@
               colspan="4"
               class="border border-slate-400 px-3 py-1.5"
             >
-              <RegistroForm @cancel-edit="editando = null" :prod="prod" />
+              <RegistroForm
+                :pre="pre"
+                :prod-id="prod.producto_ID"
+                @cancel-edit="editando = null"
+              />
             </td>
 
             <template v-else>
-              <td
-                class="border font-medium font-semibold text-slate-700 border-slate-400"
-              >
+              <td class="border font-medium text-slate-700 border-slate-400">
                 {{ pre.presentacion_tipo }}
               </td>
               <td
