@@ -1,18 +1,15 @@
-// src/stores/useSocketStore.ts
 import { ref } from "vue";
+// src/stores/useSocketStore.ts
 import { defineStore } from "pinia";
+import { IPresentacion } from "../types/db";
+import { IProductoConPresentaciones } from "../types/responses";
 
 export const useSocketStore = defineStore("regp_socket_store", () => {
-  const notificaciones = ref<string[]>([]);
-  const productosActualizados = ref<any[]>([]);
+  const presentacionGuardada = ref<{
+    presentacion: IPresentacion;
+    producto: string;
+    productoData: IProductoConPresentaciones;
+  } | null>(null);
 
-  const agregarNotificacion = (mensaje: string) => {
-    notificaciones.value.unshift(mensaje);
-  };
-
-  return {
-    notificaciones,
-    productosActualizados,
-    agregarNotificacion,
-  };
+  return { presentacionGuardada };
 });

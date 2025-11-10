@@ -5,10 +5,9 @@ export const setupSocketHandlers = () => {
   const { socket } = useSocket();
   const store = useSocketStore();
 
-  // Solo configurar una vez
-  if (socket.hasListeners("notificacion")) return;
-
-  socket.on("notificacion", (msg: string) => {
-    store.agregarNotificacion(msg);
-  });
+  if (!socket.hasListeners("presentacionGuardada")) {
+    socket.on("presentacionGuardada", (data) => {
+      store.presentacionGuardada = data;
+    });
+  }
 };

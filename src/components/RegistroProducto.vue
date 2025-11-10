@@ -19,7 +19,7 @@
     <RegistroForm
       v-if="creando"
       class="mt-3"
-      @submit-form="(data) => savePresentacion(data)"
+      @submit-form=""
       @cancel-edit="creando = false"
       :pre="null"
       :prod-id="prod.producto_ID"
@@ -78,16 +78,11 @@
 import RegistroForm from "./RegistroForm.vue";
 
 import { ref } from "vue";
-import { IFormPresentacion } from "../types/forms";
-import { IProductoConPresentaciones } from "../types/responses";
 import { PackageOpen, Pencil, Plus } from "lucide-vue-next";
+import { IProductoConPresentaciones } from "../types/responses";
 
 const creando = ref<boolean>(false);
 const editando = ref<string | number | null>(null);
 
 defineProps<{ prod: IProductoConPresentaciones }>();
-
-const savePresentacion = (data: IFormPresentacion) => {};
 </script>
-
-<style scoped></style>

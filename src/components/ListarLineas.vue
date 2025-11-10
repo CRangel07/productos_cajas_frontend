@@ -99,10 +99,11 @@
 </template>
 
 <script setup lang="ts">
-import { Menu, SquareMenu } from "lucide-vue-next";
+import RegistroProducto from "./RegistroProducto.vue";
+
+import { Menu } from "lucide-vue-next";
 import { useModalStore } from "../stores/modalStore";
 import { IProductoConPresentaciones } from "../types/responses";
-import RegistroProducto from "./RegistroProducto.vue";
 
 defineProps<{ productos: IProductoConPresentaciones[] }>();
 

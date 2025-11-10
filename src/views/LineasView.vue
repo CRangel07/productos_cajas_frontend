@@ -69,6 +69,7 @@
             ?.linea_descripcion
         }}, cantidad de items {{ productos.length }}
       </p>
+      <!-- <pre>{{ productos }}</pre> -->
       <ListarLineas :productos="productos" />
     </div>
   </div>
@@ -77,6 +78,7 @@
 <script setup lang="ts">
 import { useApi } from "../composables/useApi";
 import { ILinea } from "../types/db";
+import { useSocketStore } from "../stores/useSocketStore";
 import { Search, TableOfContents } from "lucide-vue-next";
 import { IProductoConPresentaciones } from "../types/responses";
 import { computed, onBeforeMount, reactive, ref, watch } from "vue";
@@ -85,6 +87,9 @@ import Entrada from "../components/Entrada.vue";
 import Selector, { SelectOpt } from "../components/Selector.vue";
 import ListarLineas from "../components/ListarLineas.vue";
 import SubirLineas from "../components/SubirLineas.vue";
+import { useAlert } from "../composables/useAlert";
+
+const { notificacion } = useAlert();
 
 const filtroBusqueda = reactive<{
   linea: number | null;
@@ -148,6 +153,25 @@ watch(
   () => {
     productos.value = [];
     filtroBusqueda.busqueda = null;
+  }
+);
+
+const socketStore = useSocketStore();
+
+watch(
+  () => socketStore.presentacionGuardada,
+  (data) => {
+    if (!data) return;
+    const index = productos.value.findIndex(
+      (p) => data.producto == p.producto_ID
+    );
+    notificacion({
+      text: `Se guardó presentacion ${data.presentacion.presentacion_tipo} para ${data.productoData.producto_descripcion} en linea ${data.productoData.linea_descripcion}`,
+      timer: undefined,
+    });
+    if (index !== -1) {
+      productos.value[index].presentaciones.push(data.presentacion);
+    }
   }
 );
 </script>

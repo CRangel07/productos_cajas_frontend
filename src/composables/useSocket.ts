@@ -1,6 +1,7 @@
 import { io, Socket } from "socket.io-client";
+import { ClientToServerEvents, ServerToClientEvents } from "../types/responses";
 
-let socket: Socket | null = null;
+let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
 
 // Función para inicializar
 export const useSocket = () => {

@@ -64,9 +64,9 @@ import ErrorMessage from "./ErrorMessage.vue";
 
 import { useApi } from "../composables/useApi";
 import { reactive } from "vue";
+import { IPresentacion } from "../types/db";
 import { Package2, ScanBarcode } from "lucide-vue-next";
 import { ArrPresentaciones, IFormPresentacion } from "../types/forms";
-import { IPresentacion } from "../types/db";
 
 const props = defineProps<{
   pre: IPresentacion | null;
