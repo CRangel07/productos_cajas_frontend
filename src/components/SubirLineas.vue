@@ -65,11 +65,11 @@
             {{ loading ? "Guardando..." : "Guardar" }}
           </button>
         </div>
-
-        <p v-if="error" class="text-red-500 text-sm text-center mt-2">
-          {{ error }}
-        </p>
       </div>
+
+      <p v-if="error" class="api-error mt-2">
+        {{ error }}
+      </p>
     </div>
 
     <!-- Vista previa -->

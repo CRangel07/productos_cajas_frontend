@@ -166,8 +166,8 @@ watch(
       (p) => data.producto == p.producto_ID
     );
     notificacion({
-      text: `Se guardó presentacion ${data.presentacion.presentacion_tipo} para ${data.productoData.producto_descripcion} en linea ${data.productoData.linea_descripcion}`,
-      timer: undefined,
+      text: data.message,
+      timer: 3500,
     });
     if (index !== -1) {
       productos.value[index].presentaciones.push(data.presentacion);

@@ -7,7 +7,7 @@
         <h1 class="text-sm lg:text-2xl font-semibold uppercase text-slate-50">
           Registro Productos y Cajas
         </h1>
-        <nav class="text-white text-xs lg:text-sm flex gap-2">
+        <nav class="text-white text-xs lg:text-sm flex gap-2 items-center">
           <ul v-if="enlaces.length" class="flex gap-2">
             <RouterLink
               v-for="e in enlaces"
@@ -17,6 +17,7 @@
               {{ e.texto }}
             </RouterLink>
           </ul>
+          <NotificacionesList />
           <button type="button" @click="authStore.logout()">
             Cerrar Sesión
           </button>
@@ -28,6 +29,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "../stores/authStore";
+import NotificacionesList from "./NotificacionesList.vue";
 
 const authStore = useAuthStore();
 

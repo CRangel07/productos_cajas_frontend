@@ -38,14 +38,29 @@
             <td colspan="3" class="px-4 py-2 border-y border-gray-300">
               <div class="flex justify-between">
                 <div class="flex flex-col">
-                  <span class="text-base">{{ prod.producto_descripcion }}</span>
+                  <span class="text-base">
+                    {{ prod.producto_descripcion }}
+                  </span>
                   <span class="font-normal text-xs">
                     Linea:
                     {{ prod.linea_compucaja_ID }} |
                     {{ prod.linea_descripcion }}
                   </span>
                 </div>
-                <div>
+                <div class="flex items-center gap-2">
+                  <p
+                    v-if="!!prod.producto_listo"
+                    class="text-wrap w-max break-words text-sm bg-lime-400 text-lime-900 rounded-md py-1 px-2"
+                  >
+                    Códigos Listos en Compucaja
+                  </p>
+                  <button
+                    @click=""
+                    title="Alternar estado de listo"
+                    class="bg-green-400 p-1 rounded-md text-green-800 cursor-pointer"
+                  >
+                    <Check :size="18" :stroke-width="2.5" />
+                  </button>
                   <button
                     @click="handleModal(prod)"
                     title="Abrir menú de producto"
@@ -66,8 +81,15 @@
             :key="pre.presentacion_ID"
             class="transition-colors duration-200 hover:bg-gray-50"
           >
-            <td class="px-4 py-2 border-b border-gray-200 text-gray-700">
-              {{ pre.presentacion_tipo }}
+            <td
+              class="px-4 py-2 border-b border-gray-200 text-gray-700 align-middle"
+            >
+              <div class="flex flex-col">
+                <span>{{ pre.presentacion_tipo }}</span>
+                <span class="text-xs text-slate-400">
+                  {{ formatDate(pre.presentacion_fecha, "dd/LL/yy hh:mm a") }}
+                </span>
+              </div>
             </td>
             <td
               class="px-4 py-2 border-b border-gray-200 font-mono text-gray-600 text-base"
@@ -101,9 +123,10 @@
 <script setup lang="ts">
 import RegistroProducto from "./RegistroProducto.vue";
 
-import { Menu } from "lucide-vue-next";
+import { Check, Menu } from "lucide-vue-next";
 import { useModalStore } from "../stores/modalStore";
 import { IProductoConPresentaciones } from "../types/responses";
+import { formatDate } from "../utils/general";
 
 defineProps<{ productos: IProductoConPresentaciones[] }>();
 

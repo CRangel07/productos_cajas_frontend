@@ -9,6 +9,7 @@ export const useSocketStore = defineStore("regp_socket_store", () => {
     presentacion: IPresentacion;
     producto: string;
     productoData: IProductoConPresentaciones;
+    message: string;
   } | null>(null);
 
   return { presentacionGuardada };

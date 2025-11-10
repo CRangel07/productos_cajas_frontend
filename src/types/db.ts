@@ -5,7 +5,7 @@ export type IProductos = {
   producto_pasillo: number;
   producto_rack_nivel: number;
   producto_registro: string;
-  producto_listo: 1 | 0 | boolean
+  producto_listo: 1 | 0 | boolean;
 };
 
 export type ITipoPresentacion = "PIEZA" | "CAJA" | "TARIMA";
@@ -19,6 +19,7 @@ export type IPresentacion = {
   presentacion_codigo_barras: string;
   presentacion_cantidad: number;
   presentacion_tipo_codigo: ITipoCodigo | null;
+  presentacion_fecha: string | null;
 };
 
 export type IProductoJovany = {
@@ -43,7 +44,7 @@ export type IUsuarios = {
 };
 
 export type ILinea = {
-  linea_ID: number
-  linea_compucaja_ID: string
-  linea_descripcion: string
-}
+  linea_ID: number;
+  linea_compucaja_ID: string;
+  linea_descripcion: string;
+};
