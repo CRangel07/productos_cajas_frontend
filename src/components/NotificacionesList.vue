@@ -1,9 +1,9 @@
 <template>
-  <div class="relative">
+  <div ref="notificationRoot" class="relative">
     <!-- Botón campana -->
     <button
-      class="relative bg-white dark:bg-slate-900 text-sky-500 hover:text-sky-400 transition-colors rounded-full p-2 shadow-sm hover:shadow-md focus:outline-none"
-      @click.stop="showNotis = !showNotis"
+      class="relative bg-white dark:bg-slate-800 text-sky-500 hover:text-sky-400 transition-colors rounded-full p-2 shadow-sm hover:shadow-md focus:outline-none"
+      @click.stop="toggleMenu"
     >
       <BellDot :size="22" />
       <span
@@ -54,9 +54,13 @@
             <div class="flex-shrink-0">
               <Info :size="18" class="text-sky-500" />
             </div>
-            <p class="text-sm leading-tight break-words font-medium text-slate-700">
+            <p
+              class="text-sm leading-tight break-words font-medium text-slate-700 dark:text-slate-500"
+            >
               {{ not.texto }}
-              <span class="text-slate-400 text-xs block">{{ not.time }}</span>
+              <span class="text-slate-400 dark:text-slate-600 text-xs block">{{
+                not.time
+              }}</span>
             </p>
           </li>
         </ul>
@@ -74,10 +78,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { BellDot, Info } from "lucide-vue-next";
 import { useNotificacionStore } from "../stores/notificationStore";
 
+const notificationRoot = ref<HTMLElement | null>(null);
 const notiStore = useNotificacionStore();
 const showNotis = ref(false);
+
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as Node;
+  if (notificationRoot.value && !notificationRoot.value.contains(target)) {
+    showNotis.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
+
+const toggleMenu = () => (showNotis.value = !showNotis.value);
 </script>

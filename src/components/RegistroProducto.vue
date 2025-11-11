@@ -31,42 +31,28 @@
       <table class="w-full align-middle text-center border-collapse">
         <tbody>
           <tr v-for="pre in prod.presentaciones" :key="pre.presentacion_ID">
-            <td
-              v-if="editando === pre.presentacion_ID && creando === false"
-              colspan="4"
-              class="border border-slate-400 px-3 py-1.5"
-            >
-              <RegistroForm
-                :pre="pre"
-                :prod-id="prod.producto_ID"
-                @cancel-edit="editando = null"
-              />
+            <td class="border font-medium text-slate-700 border-slate-400">
+              {{ pre.presentacion_tipo }}
             </td>
-
-            <template v-else>
-              <td class="border font-medium text-slate-700 border-slate-400">
-                {{ pre.presentacion_tipo }}
-              </td>
-              <td
-                class="border font-mono text-xl text-blue-700 border-slate-400 font-medium"
-              >
-                {{ pre.presentacion_codigo_barras }}
-              </td>
-              <td class="border font-medium text-slate-700 border-slate-400">
-                Cantidad:{{ pre.presentacion_cantidad }}
-              </td>
-              <td class="border border-slate-400 py-2">
-                <div>
-                  <button
-                    type="button"
-                    @click="creando ? '' : (editando = pre.presentacion_ID)"
-                    class="bg-yellow-400 text-yellow-900 rounded p-0.5 align-sub"
-                  >
-                    <Pencil />
-                  </button>
-                </div>
-              </td>
-            </template>
+            <td
+              class="border font-mono text-xl text-blue-700 border-slate-400 font-medium"
+            >
+              {{ pre.presentacion_codigo_barras }}
+            </td>
+            <td class="border font-medium text-slate-700 border-slate-400">
+              Cantidad:{{ pre.presentacion_cantidad }}
+            </td>
+            <td class="border border-slate-400 py-2">
+              <div>
+                <button
+                  type="button"
+                  @click="handleDelete(prod, pre)"
+                  class="bg-rose-400 text-rose-900 rounded p-1 align-sub cursor-pointer"
+                >
+                  <Trash :size="18" />
+                </button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -78,11 +64,25 @@
 import RegistroForm from "./RegistroForm.vue";
 
 import { ref } from "vue";
-import { PackageOpen, Pencil, Plus } from "lucide-vue-next";
+import { PackageOpen, Plus, Trash } from "lucide-vue-next";
 import { IProductoConPresentaciones } from "../types/responses";
-
-const creando = ref<boolean>(false);
-const editando = ref<string | number | null>(null);
+import { useAlert } from "../composables/useAlert";
+import { IPresentacion } from "../types/db";
 
 defineProps<{ prod: IProductoConPresentaciones }>();
+
+const { confirm } = useAlert();
+const creando = ref<boolean>(false);
+
+const handleDelete = async (
+  prod: IProductoConPresentaciones,
+  pre: IPresentacion
+) => {
+  const userResponse = await confirm({
+    text: `Confirma la eliminación de la presentación ${pre.presentacion_tipo} de ${prod.linea_descripcion} ${pre.presentacion_codigo_barras}
+    `,
+  });
+
+  if (!userResponse.isConfirmed) return;
+};
 </script>

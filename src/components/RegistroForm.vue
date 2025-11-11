@@ -102,6 +102,8 @@ const { apiFetch, error, loading } = useApi();
 
 const savePresentacion = async () => {
   await apiFetch("/presentacion", { method: "POST", body: data });
-  if (error == null) initData();
+  if (error.value === null) {
+    Object.assign(data, initData());
+  }
 };
 </script>
