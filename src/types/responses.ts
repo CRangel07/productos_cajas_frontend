@@ -15,7 +15,14 @@ export type ServerToClientEvents = {
     producto: string;
     productoData: IProductoConPresentaciones; //  Esta desfasada ya que se obtuve antes de insertar la presentaicion
   }) => void;
+
+  presentacionEliminada: (data: {
+    presentacion: IPresentacion & Pick<IProductos, "producto_descripcion">;
+  }) => void;
+
+  productoStatus: (data: { producto: IProductos; status: 1 | 0 }) => void;
 };
+
 export type ClientToServerEvents = {
   mensaje: (mensaje: string) => void;
 };

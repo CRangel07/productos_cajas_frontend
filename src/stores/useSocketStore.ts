@@ -1,7 +1,7 @@
 import { ref } from "vue";
 // src/stores/useSocketStore.ts
 import { defineStore } from "pinia";
-import { IPresentacion } from "../types/db";
+import { IPresentacion, IProductos } from "../types/db";
 import { IProductoConPresentaciones } from "../types/responses";
 
 export const useSocketStore = defineStore("regp_socket_store", () => {
@@ -12,5 +12,19 @@ export const useSocketStore = defineStore("regp_socket_store", () => {
     message: string;
   } | null>(null);
 
-  return { presentacionGuardada };
+  const presentacionEliminada = ref<{
+    presentacion: IPresentacion & Pick<IProductos, "producto_descripcion">;
+    message: string;
+  } | null>(null);
+
+  const productoStateActualizado = ref<{
+    producto: IProductos;
+    status: 1 | 0;
+  } | null>(null);
+
+  return {
+    presentacionGuardada,
+    presentacionEliminada,
+    productoStateActualizado,
+  };
 });

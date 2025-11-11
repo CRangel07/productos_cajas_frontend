@@ -32,13 +32,13 @@
           <tr
             :class="[
               'font-semibold text-gray-900 text-base',
-              i % 2 === 0 ? 'bg-teal-200/70' : 'bg-indigo-200/70',
+              i % 2 === 0 ? 'bg-lime-100/70' : 'bg-indigo-100/70',
             ]"
           >
             <td colspan="3" class="px-4 py-2 border-y border-gray-300">
               <div class="flex justify-between">
                 <div class="flex flex-col">
-                  <span class="text-base">
+                  <span class="text-xl font-mono">
                     {{ prod.producto_descripcion }}
                   </span>
                   <span class="font-normal text-xs">
@@ -55,9 +55,10 @@
                     Códigos Listos en Compucaja
                   </p>
                   <button
-                    @click=""
+                    @click="handleToggleState(prod)"
                     title="Alternar estado de listo"
-                    class="bg-green-400 p-1 rounded-md text-green-800 cursor-pointer"
+                    class="bg-green-400 p-1 rounded-md text-green-800 cursor-pointer disabled:bg-slate-700 disabled:text-slate-100"
+                    :disabled="loading"
                   >
                     <Check :size="18" :stroke-width="2.5" />
                   </button>
@@ -85,19 +86,21 @@
               class="px-4 py-2 border-b border-gray-200 text-gray-700 align-middle"
             >
               <div class="flex flex-col">
-                <span>{{ pre.presentacion_tipo }}</span>
+                <span class="text-base font-mono text-slate-600 font-semibold">
+                  {{ pre.presentacion_tipo }}
+                </span>
                 <span class="text-xs text-slate-400">
                   {{ formatDate(pre.presentacion_fecha, "dd/LL/yy hh:mm a") }}
                 </span>
               </div>
             </td>
             <td
-              class="px-4 py-2 border-b border-gray-200 font-mono text-gray-600 text-base"
+              class="px-4 py-2 border-b border-gray-200 font-mono text-gray-600 text-xl"
             >
               {{ pre.presentacion_codigo_barras }}
             </td>
             <td
-              class="px-4 py-2 border-b border-gray-200 text-gray-700 text-center"
+              class="px-4 py-2 border-b border-gray-200 text-gray-700 text-center text-xl font-mono"
             >
               {{ pre.presentacion_cantidad }}
             </td>
@@ -123,10 +126,11 @@
 <script setup lang="ts">
 import RegistroProducto from "./RegistroProducto.vue";
 
+import { useApi } from "../composables/useApi";
+import { formatDate } from "../utils/general";
 import { Check, Menu } from "lucide-vue-next";
 import { useModalStore } from "../stores/modalStore";
 import { IProductoConPresentaciones } from "../types/responses";
-import { formatDate } from "../utils/general";
 
 defineProps<{ productos: IProductoConPresentaciones[] }>();
 
@@ -139,6 +143,15 @@ const handleModal = (prod: IProductoConPresentaciones) => {
     props: {
       prod: prod,
     },
+  });
+};
+
+const { apiFetch, loading } = useApi();
+
+const handleToggleState = async (prod: IProductoConPresentaciones) => {
+  await apiFetch("/producto/estatus", {
+    method: "PUT",
+    body: { id: prod.producto_ID },
   });
 };
 </script>

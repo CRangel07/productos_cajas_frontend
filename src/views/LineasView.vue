@@ -57,7 +57,7 @@
     </div>
 
     <div>
-      <p class="api-loading" v-if="loadingProductos">{{ loadingProductos }}</p>
+      <p class="api-loading" v-if="loadingProductos">Cargando productos...</p>
       <p class="api-error" v-if="errorProductos">{{ errorProductos }}</p>
       <p
         v-if="productos.length && filtroBusqueda.linea"
@@ -78,6 +78,7 @@
 <script setup lang="ts">
 import { useApi } from "../composables/useApi";
 import { ILinea } from "../types/db";
+import { useAlert } from "../composables/useAlert";
 import { useSocketStore } from "../stores/useSocketStore";
 import { Search, TableOfContents } from "lucide-vue-next";
 import { IProductoConPresentaciones } from "../types/responses";
@@ -87,7 +88,6 @@ import Entrada from "../components/Entrada.vue";
 import Selector, { SelectOpt } from "../components/Selector.vue";
 import ListarLineas from "../components/ListarLineas.vue";
 import SubirLineas from "../components/SubirLineas.vue";
-import { useAlert } from "../composables/useAlert";
 
 const { notificacion } = useAlert();
 
@@ -99,6 +99,7 @@ const filtroBusqueda = reactive<{
   linea: null,
 });
 
+const socketStore = useSocketStore();
 const lineas = ref<ILinea[]>([]);
 const productos = ref<IProductoConPresentaciones[]>([]);
 
@@ -156,21 +157,46 @@ watch(
   }
 );
 
-const socketStore = useSocketStore();
-
 watch(
   () => socketStore.presentacionGuardada,
   (data) => {
     if (!data) return;
     const index = productos.value.findIndex(
-      (p) => data.producto == p.producto_ID
+      (p) => p.producto_ID === data.producto
     );
-    notificacion({
-      text: data.message,
-      timer: 3500,
-    });
+    notificacion({ text: data.message, timer: 3500 });
     if (index !== -1) {
       productos.value[index].presentaciones.push(data.presentacion);
+    }
+  }
+);
+
+watch(
+  () => socketStore.presentacionEliminada,
+  (data) => {
+    if (!data) return;
+    const index = productos.value.findIndex(
+      (p) => p.producto_ID === data.presentacion.presentacion_producto
+    );
+    if (index !== -1) {
+      const producto = productos.value[index];
+      producto.presentaciones = producto.presentaciones.filter(
+        (pres) => pres.presentacion_ID !== data.presentacion.presentacion_ID
+      );
+    }
+  }
+);
+
+watch(
+  () => socketStore.productoStateActualizado,
+  (data) => {
+    if (!data) return;
+    const index = productos.value.findIndex(
+      (p) => p.producto_ID === data.producto.producto_ID
+    );
+    if (index !== -1) {
+      const producto = productos.value[index];
+      producto.producto_listo = data.status;
     }
   }
 );

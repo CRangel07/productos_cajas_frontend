@@ -27,6 +27,9 @@
 
     <p class="text-md text-slate-600 my-3">Presentaciones</p>
 
+    <ErrorMessage v-if="error" :message="error" />
+    <p v-if="loading" class="api-loading">Eliminando producto</p>
+
     <div class="overflow-auto">
       <table class="w-full align-middle text-center border-collapse">
         <tbody>
@@ -46,8 +49,10 @@
               <div>
                 <button
                   type="button"
+                  title="Eliminar presentación"
+                  :disabled="loading"
                   @click="handleDelete(prod, pre)"
-                  class="bg-rose-400 text-rose-900 rounded p-1 align-sub cursor-pointer"
+                  class="bg-rose-400 text-rose-900 rounded p-1 align-sub cursor-pointer disabled:bg-slate-600"
                 >
                   <Trash :size="18" />
                 </button>
@@ -62,27 +67,36 @@
 
 <script setup lang="ts">
 import RegistroForm from "./RegistroForm.vue";
+import ErrorMessage from "./ErrorMessage.vue";
 
 import { ref } from "vue";
-import { PackageOpen, Plus, Trash } from "lucide-vue-next";
-import { IProductoConPresentaciones } from "../types/responses";
+import { useApi } from "../composables/useApi";
 import { useAlert } from "../composables/useAlert";
 import { IPresentacion } from "../types/db";
+import { PackageOpen, Plus, Trash } from "lucide-vue-next";
+import { IProductoConPresentaciones } from "../types/responses";
 
 defineProps<{ prod: IProductoConPresentaciones }>();
 
 const { confirm } = useAlert();
-const creando = ref<boolean>(false);
+const creando = ref<boolean>(true);
+
+const { apiFetch, error, loading } = useApi();
 
 const handleDelete = async (
   prod: IProductoConPresentaciones,
   pre: IPresentacion
 ) => {
   const userResponse = await confirm({
-    text: `Confirma la eliminación de la presentación ${pre.presentacion_tipo} de ${prod.linea_descripcion} ${pre.presentacion_codigo_barras}
+    text: `Confirma la eliminación de la presentación ${pre.presentacion_tipo} de ${prod.producto_descripcion} codigo ${pre.presentacion_codigo_barras}
     `,
   });
 
   if (!userResponse.isConfirmed) return;
+
+  await apiFetch("/presentacion", {
+    method: "DELETE",
+    body: { id: pre.presentacion_ID },
+  });
 };
 </script>
