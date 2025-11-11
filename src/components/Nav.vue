@@ -34,7 +34,6 @@ import NotificacionesList from "./NotificacionesList.vue";
 const authStore = useAuthStore();
 
 const enlaces: { ruta: string; texto: string }[] = [
-  { ruta: "regp_registro_page", texto: "Registro" },
   { ruta: "regp_registro_lineas", texto: "Lineas" },
 ];
 </script>

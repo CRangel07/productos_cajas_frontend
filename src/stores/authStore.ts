@@ -30,7 +30,7 @@ export const useAuthStore = defineStore("regp_store_auth", () => {
     if (responseLogin && error.value === null) {
       usuario.value = responseLogin.usuario;
       localStorage.setItem(LocalKey, JSON.stringify(usuario.value));
-      router.replace({ name: "regp_registro_page" });
+      router.replace({ name: "regp_registro_lineas" });
       alertas.notificacion({
         icon: "success",
         text: `Bienvenido ${usuario.value.usuario_nick}`,
