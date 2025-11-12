@@ -6,10 +6,10 @@ let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
 // Función para inicializar
 export const useSocket = () => {
   if (!socket) {
-    socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:3000", {
-      autoConnect: true, // no conectar hasta llamar
-      transports: ["websocket"], // fuerza WebSocket evitar polling
+    socket = io(import.meta.env.VITE_SOCKET_URL, {
       path: "/api/productos/socket.io",
+      autoConnect: true,
+      secure: import.meta.env.DEV ? false : true,
     });
 
     socket.on("connect", () => {
