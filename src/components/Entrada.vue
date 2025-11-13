@@ -2,7 +2,11 @@
   <div class="flex flex-col group w-full relative">
     <label
       :for="props.opt.id"
-      class="text-slate-600 text-xs md:text-sm mb-0.5 md:mb-1 group-focus-within:text-blue-600 block tracking-wider font-medium"
+      :class="{
+        'text-slate-600': props.opt.color == 'dark',
+        'text-slate-100': props.opt.color == 'white',
+      }"
+      class="text-xs md:text-sm mb-0.5 md:mb-1 group-focus-within:text-blue-600 block tracking-wider font-medium"
     >
       {{ props.label }}
     </label>
@@ -40,6 +44,7 @@ type EntradaOptions = Partial<{
   placeholder: string;
   step: number;
   autocomplete: string;
+  color: "white" | "dark";
 }> & {
   type: TipoEntrada;
   required: boolean;

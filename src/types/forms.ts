@@ -34,3 +34,9 @@ export type IFormPresentacion = {
   tipo: ITipoPresentacion | null;
   cantidad: number | null;
 };
+
+export type IFormProducto = {
+  codigo: string | null;
+  descripcion: string | null;
+  linea: string | null | number;
+};

@@ -20,6 +20,7 @@
           mensajeError: 'Debe ser el archivo TXT de la INVENTARIO POR LINEA',
         }"
       />
+      <DescargarExcel />
     </div>
     <p v-if="errorLineas" class="api-error">{{ errorLineas }}</p>
     <div>
@@ -55,8 +56,18 @@
         </button>
       </form>
     </div>
+  </div>
 
-    <div>
+  <section
+    v-if="productos.length"
+    class="grid grid-cols-3 gap-5 items-center max-w-7xl m-auto my-6"
+  >
+    <DetalleProducto
+      :prod="productoSeleccionado"
+      class="col-span-full md:col-span-1"
+      @limpiar-producto="productoSeleccionado = null"
+    />
+    <div class="col-span-full md:col-span-2">
       <p class="api-loading" v-if="loadingProductos">Cargando productos...</p>
       <p class="api-error" v-if="errorProductos">{{ errorProductos }}</p>
       <p
@@ -66,13 +77,26 @@
         Listando Linea de
         {{
           lineas.find((l) => l.linea_ID == filtroBusqueda.linea)
-            ?.linea_descripcion
+            ?.linea_descripcion ?? "Cualquier Linea"
         }}, cantidad de items {{ productos.length }}
       </p>
       <!-- <pre>{{ productos }}</pre> -->
-      <ListarLineas :productos="productos" />
+      <ListarLineas
+        :productos="productos"
+        :producto-seleccionado="productoSeleccionado"
+        @item-seleccionado="seleccionarItem"
+      />
     </div>
-  </div>
+  </section>
+  <section
+    v-else-if="!productos.length && productoNotFound"
+    class="max-w-xl m-auto gap-3 bg-white flex my-10 flex-col"
+  >
+    <NoProductFound :lineas="lineasOpt" />
+  </section>
+  <p v-else class="text-center my-10 text-slate-400 font-mono">
+    Selecciona una linea y presiona obtener
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -86,8 +110,11 @@ import { computed, onBeforeMount, reactive, ref, watch } from "vue";
 
 import Entrada from "../components/Entrada.vue";
 import Selector, { SelectOpt } from "../components/Selector.vue";
-import ListarLineas from "../components/ListarLineas.vue";
 import SubirLineas from "../components/SubirLineas.vue";
+import ListarLineas from "../components/ListarLineas.vue";
+import NoProductFound from "../components/NoProductFound.vue";
+import DetalleProducto from "../components/DetalleProducto.vue";
+import DescargarExcel from "../components/DescargarExcel.vue";
 
 const { notificacion } = useAlert();
 
@@ -102,6 +129,8 @@ const filtroBusqueda = reactive<{
 const socketStore = useSocketStore();
 const lineas = ref<ILinea[]>([]);
 const productos = ref<IProductoConPresentaciones[]>([]);
+const productoNotFound = ref<boolean>(false);
+const productoSeleccionado = ref<IProductoConPresentaciones | null>(null);
 
 const lineasOpt = computed(() => {
   const mappedLines = lineas.value.map<SelectOpt>((l) => ({
@@ -125,6 +154,7 @@ const {
 } = useApi();
 
 const getProductos = async () => {
+  productoNotFound.value = false;
   const params = new URLSearchParams({
     linea: String(filtroBusqueda.linea),
     busqueda: String(filtroBusqueda.busqueda),
@@ -134,26 +164,27 @@ const getProductos = async () => {
   }>(`/producto?${params.toString()}`);
 
   if (errorProductos.value === null) {
+    productoSeleccionado.value = null;
     productos.value = response.productos;
+    if (!productos.value.length) {
+      productoNotFound.value = true;
+    }
   } else {
+    productoSeleccionado.value = null;
     productos.value = [];
   }
 };
 
-onBeforeMount(async () => {
-  const lineaResponse = await fetchLineas<{ lineas: ILinea[] }>("/lineas");
-  if (errorLineas.value == null) {
-    lineas.value = lineaResponse.lineas;
-  } else {
-    lineas.value = [];
-  }
-});
+const seleccionarItem = (prod: IProductoConPresentaciones) => {
+  productoSeleccionado.value = prod;
+};
 
 watch(
   () => filtroBusqueda.linea,
   () => {
     productos.value = [];
     filtroBusqueda.busqueda = null;
+    productoSeleccionado.value = null;
   }
 );
 
@@ -167,6 +198,8 @@ watch(
     notificacion({ text: data.message, timer: 3500 });
     if (index !== -1) {
       productos.value[index].presentaciones.push(data.presentacion);
+    } else {
+      getProductos();
     }
   }
 );
@@ -200,4 +233,13 @@ watch(
     }
   }
 );
+
+onBeforeMount(async () => {
+  const lineaResponse = await fetchLineas<{ lineas: ILinea[] }>("/lineas");
+  if (errorLineas.value == null) {
+    lineas.value = lineaResponse.lineas;
+  } else {
+    lineas.value = [];
+  }
+});
 </script>

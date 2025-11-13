@@ -1,5 +1,5 @@
 <template>
-  <form class="grid grid-cols-8 gap-2" @submit.prevent="savePresentacion">
+  <form class="flex flex-wrap gap-1" @submit.prevent="savePresentacion">
     <ErrorMessage
       v-if="error"
       :message="error"
@@ -10,7 +10,12 @@
       label="Tipo Presentación"
       :icono="Package2"
       :opt="ArrPresentaciones.map<SelectOpt>((p) => ({ label: p, value: p }))"
-      :config="{ disabled: loading, id: 'reg_form_pre_tipo', required: true }"
+      :config="{
+        disabled: loading,
+        required: true,
+        colorLabel: 'white',
+        id: 'reg_form_pre_tipo',
+      }"
       v-model="data.tipo"
       class="col-span-2"
     />
@@ -24,6 +29,7 @@
         id: 'reg_form_pre_codigo',
         required: true,
         type: 'text',
+        color: 'white',
       }"
     />
     <Entrada
@@ -38,22 +44,25 @@
         type: 'number',
         min: 1,
         max: 200,
+        color: 'white',
       }"
     />
-    <button
-      type="button"
-      class="bg-yellow-500 text-yellow-50 rounded text-sm font-medium cursor-pointer active:scale-95"
-      @click="emit('cancelEdit')"
-    >
-      Cancelar
-    </button>
-    <button
-      class="bg-green-500 text-green-50 rounded text-sm font-medium cursor-pointer active:scale-95"
-      type="submit"
-      :disabled="loading"
-    >
-      Guardar
-    </button>
+    <div class="flex mt-3 gap-2">
+      <button
+        type="button"
+        class="bg-yellow-500 text-yellow-50 p-0.5 px-2 rounded text-sm font-medium cursor-pointer active:scale-95"
+        @click="emit('cancelEdit')"
+      >
+        Cancelar
+      </button>
+      <button
+        class="bg-green-500 text-green-50 rounded p-0.5 px-2 text-sm font-medium cursor-pointer active:scale-95"
+        type="submit"
+        :disabled="loading"
+      >
+        Guardar
+      </button>
+    </div>
   </form>
 </template>
 

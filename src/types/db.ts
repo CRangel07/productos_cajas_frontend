@@ -34,6 +34,8 @@ export type IProductoJovany = {
   ums: number;
   code: string | null;
   imagen: number;
+  linea_nombre: string | null;
+  linea_codigo: string | null;
 };
 
 export type IUsuarios = {

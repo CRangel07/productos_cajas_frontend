@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="max-w-3xl m-auto overflow-x-auto rounded-lg shadow-lg bg-white mt-5"
-  >
+  <div class="w-full overflow-x-auto rounded-lg shadow-lg bg-white h-[70vh]">
     <table class="w-full border-collapse text-sm text-left">
       <thead class="bg-gray-800 sticky top-0 z-10">
         <tr>
@@ -25,15 +23,19 @@
       <tbody>
         <template
           v-if="productos.length"
-          v-for="(prod, i) in productos"
+          v-for="prod in productos"
           :key="prod.producto_ID"
         >
           <!-- Fila de encabezado del producto -->
           <tr
-            :class="[
-              'font-semibold text-gray-900 text-base',
-              i % 2 === 0 ? 'bg-lime-100/70' : 'bg-indigo-100/70',
-            ]"
+            :class="{
+              'bg-blue-400 border-2 border-blue-800':
+                productoSeleccionado?.producto_ID == prod.producto_ID,
+              'bg-slate-200':
+                productoSeleccionado?.producto_ID !== prod.producto_ID,
+            }"
+            class="cursor-pointer"
+            @click="handleItemSelect(prod)"
           >
             <td colspan="3" class="px-4 py-2 border-y border-gray-300">
               <div class="flex justify-between">
@@ -55,19 +57,12 @@
                     Códigos Listos en Compucaja
                   </p>
                   <button
-                    @click="handleToggleState(prod)"
+                    @click.stop="handleToggleState(prod)"
                     title="Alternar estado de listo"
                     class="bg-green-400 p-1 rounded-md text-green-800 cursor-pointer disabled:bg-slate-700 disabled:text-slate-100"
                     :disabled="loading"
                   >
                     <Check :size="18" :stroke-width="2.5" />
-                  </button>
-                  <button
-                    @click="handleModal(prod)"
-                    title="Abrir menú de producto"
-                    class="bg-yellow-400 p-1 rounded-md text-yellow-800 cursor-pointer"
-                  >
-                    <Menu :size="18" :stroke-width="2.5" />
                   </button>
                 </div>
               </div>
@@ -80,7 +75,13 @@
             v-if="prod.presentaciones.length"
             v-for="pre in prod.presentaciones"
             :key="pre.presentacion_ID"
-            class="transition-colors duration-200 hover:bg-gray-50"
+            class="transition-colors duration-200 hover:bg-gray-50 cursor-pointer"
+            :class="{
+              'border-2 border-blue-800':
+                productoSeleccionado?.producto_ID == prod.producto_ID,
+              'bg-white': productoSeleccionado?.producto_ID,
+            }"
+            @click="handleItemSelect(prod)"
           >
             <td
               class="px-4 py-2 border-b border-gray-200 text-gray-700 align-middle"
@@ -124,27 +125,19 @@
 </template>
 
 <script setup lang="ts">
-import RegistroProducto from "./RegistroProducto.vue";
-
+import { Check } from "lucide-vue-next";
 import { useApi } from "../composables/useApi";
 import { formatDate } from "../utils/general";
-import { Check, Menu } from "lucide-vue-next";
-import { useModalStore } from "../stores/modalStore";
 import { IProductoConPresentaciones } from "../types/responses";
 
-defineProps<{ productos: IProductoConPresentaciones[] }>();
+defineProps<{
+  productos: IProductoConPresentaciones[];
+  productoSeleccionado: IProductoConPresentaciones | null;
+}>();
 
-const modalStore = useModalStore();
-
-const handleModal = (prod: IProductoConPresentaciones) => {
-  modalStore.openModal(RegistroProducto, {
-    title: "Gestión de producto",
-    width: "lg",
-    props: {
-      prod: prod,
-    },
-  });
-};
+const emit = defineEmits<{
+  (e: "itemSeleccionado", prod: IProductoConPresentaciones): void;
+}>();
 
 const { apiFetch, loading } = useApi();
 
@@ -153,5 +146,9 @@ const handleToggleState = async (prod: IProductoConPresentaciones) => {
     method: "PUT",
     body: { id: prod.producto_ID },
   });
+};
+
+const handleItemSelect = (prod: IProductoConPresentaciones) => {
+  emit("itemSeleccionado", prod);
 };
 </script>

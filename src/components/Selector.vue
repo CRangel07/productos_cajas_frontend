@@ -2,7 +2,14 @@
   <div class="flex flex-col group w-full">
     <label
       :for="props.config.id"
-      class="text-slate-600 text-xs md:text-sm mb-0.5 md:mb-1 group-focus-within:text-blue-600 block tracking-wider"
+      :class="{
+        'text-slate-600':
+          (props.config.colorLabel && props.config.colorLabel == 'dark') ||
+          !props.config.colorLabel,
+        'text-slate-100':
+          props.config.colorLabel && props.config.colorLabel == 'white',
+      }"
+      class="text-xs md:text-sm mb-0.5 md:mb-1 group-focus-within:text-blue-600 block tracking-wider"
     >
       {{ props.label }}
     </label>
@@ -39,6 +46,7 @@ type SelectConfig = {
   id: string;
   required: boolean;
   disabled: boolean;
+  colorLabel?: "white" | "dark";
 };
 
 export type SelectOpt = {
