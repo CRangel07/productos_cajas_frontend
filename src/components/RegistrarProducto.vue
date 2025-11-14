@@ -128,7 +128,7 @@ const checkRelatedCode = async (code: string | null) => {
 const {
   apiFetch: postProducto,
   error: errorProducto,
-  loading: loadingProducto,
+  // loading: loadingProducto,
 } = useApi();
 
 const saveProducto = async () => {
