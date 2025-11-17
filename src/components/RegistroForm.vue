@@ -43,7 +43,7 @@
         required: true,
         type: 'number',
         min: 1,
-        max: 200,
+        max: 1000,
         color: 'white',
       }"
     />
