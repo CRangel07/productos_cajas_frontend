@@ -91,7 +91,7 @@
                   {{ pre.presentacion_tipo }}
                 </span>
                 <span class="text-xs text-slate-400">
-                  {{ formatDate(pre.presentacion_fecha, "dd/LL/yy hh:mm a") }}
+                  {{ formatDate(pre.presentacion_fecha, "dd/LL/yy hh:mm:ss a") }}
                 </span>
               </div>
             </td>

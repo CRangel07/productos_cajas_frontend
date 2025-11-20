@@ -18,14 +18,14 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import Nav from "../components/Nav.vue";
+
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const handleRuta = () => {
-  router.replace({ name: "regp_registro_page" });
+  router.replace({ name: "regp_registro_lineas" });
 };
 </script>
 
-<style scoped></style>

@@ -14,7 +14,7 @@ import LineasView from "../views/LineasView.vue";
 const rutasApp: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: { name: "regp_registro_page" },
+    redirect: { name: "regp_registro_lineas" },
   },
   {
     path: "/login",
