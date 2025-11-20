@@ -57,9 +57,6 @@
                     >
                       LISTO
                     </span>
-                    <span class="text-xs lg:text-sm text-slate-700">
-                      {{ formatDate(p.producto_registro) }}
-                    </span>
                   </p>
 
                   <div class="flex flex-col items-center">
